@@ -1,11 +1,17 @@
 {
   "templateName" : "Collection",
   "type": "page",
-  "templatePath" : "/template_content/page/text/text.html",
+  "templatePath" : "/template_content/page/collection/collection.json",
   "version" : 1,
   "contents": {
+    "featuredImage": {
+      "type": "image",
+      "helpText": "Ideally 16:9. This image will be shown at the top of the collection page.",
+      "required": false
+    },
     "description": {
-      "type": "text"
+      "type": "text",
+      "required": false
     },
     "articlePreview" : {
       "type": "component",

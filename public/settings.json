@@ -1,24 +1,24 @@
 {
-    "NAME": "Seaforest Species Explorer",
+    "NAME": "1001 Seaforest Species",
     "PACKAGE_NAME": "org.localcosmos.seaforestspecies",
     "LANGUAGES": [
         "en"
     ],
     "PRIMARY_LANGUAGE": "en",
     "APP_UID": "seaforest",
-    "APP_UUID": "31c7ccbe-0dea-4959-bd41-d5755fd68889",
+    "APP_UUID": "b3b4bb97-82dc-486d-9f71-e464d690e100",
     "APP_VERSION": 1,
-    "BUILD_NUMBER": 139,
-    "API_URL": "https://seaforest.seachangeproject-apps.com/api/",
-    "MEDIA_URL": "https://seaforest.seachangeproject-apps.com/media/",
-    "SERVER_URL": "https://seaforest.seachangeproject-apps.com/",
-    "PREVIEW": false,
+    "BUILD_NUMBER": 8,
+    "API_URL": "http://seaforest.tomwork.sisol:8000/api/",
+    "MEDIA_URL": "http://seaforest.tomwork.sisol:8000/media/",
+    "SERVER_URL": "http://seaforest.tomwork.sisol:8000/",
+    "PREVIEW": true,
     "OPTIONS": {
         "allowAnonymousObservations": false,
         "doNotBuildLargeImages": false
     },
-    "frontend": "MultiverseBeta",
-    "version": "0.10",
+    "frontend": "Sea Change Project",
+    "version": "0.7",
     "userContent": {
         "configuration": {
             "geonamesUsername": {
@@ -67,24 +67,28 @@
                 "helpText": "Will be displayed in the browser tab",
                 "required": true
             },
-            "protraitBackground" : {
+            "backgroundImage": {
                 "restrictions": {
                     "fileType": [
-                        "png", "jpg", "jpeg", "webp"
+                        "png",
+                        "jpg",
+                        "webp"
                     ],
-                    "ratio": "9:16"
+                    "ratio": "1:2"
                 },
-                "helpText": "Will be displayed on the apps main page in portrait orientation",
+                "helpText": "Will be displayed in the background of the app's main page",
                 "required": false
             },
-            "landscapeBackground" : {
+            "landscapeBackgroundImage": {
                 "restrictions": {
                     "fileType": [
-                        "png", "jpg", "jpeg", "webp"
+                        "png",
+                        "jpg",
+                        "webp"
                     ],
-                    "ratio": "16:9"
+                    "ratio": "2:1"
                 },
-                "helpText": "Will be displayed on the apps main page in landscape orientation",
+                "helpText": "Will be displayed in the background of the app's main page when device is in landscape mode",
                 "required": false
             }
         },
@@ -100,7 +104,8 @@
         "navigations": {
             "main": {
                 "name": "Main navigation",
-                "maxLevels": 1
+                "maxLevels": 1,
+                "maxEntries": 1
             },
             "burger": {
                 "name": "Burger menu",
@@ -111,18 +116,15 @@
     },
     "cordova": {
         "platforms": {
-            "android": "android@14.0.1",
-            "ios": "ios@7.1.1",
+            "android": "android@15.0.0",
+            "ios": "ios@8.0.1",
             "browser": "browser@7.0.0"
         },
         "plugins": [
-            "cordova-plugin-camera@8.0.0",
             "cordova-plugin-device@2.1.0",
-            "cordova-plugin-geolocation@4.1.0",
-            "cordova-plugin-network-information@3.0.0",
             "cordova-plugin-statusbar@3.0.0",
             "cordova-plugin-wkwebview-file-xhr@3.1.0",
-            "cordova-plugin-inappbrowser@6.0.0"
+            "cordova-plugin-assetpack"
         ]
     }
 }

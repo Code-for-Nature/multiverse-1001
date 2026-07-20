@@ -4,12 +4,12 @@ import { useRouter } from 'vue-router';
 import { useMainNavigationStore } from '@/stores/main-navigation';
 import i18next, { t } from 'i18next';
 import type { ComputedRef } from 'vue';
-import type { TaxonProfiles, TaxonProfile, Taxon, ImageWithTextAndLicence, Features } from 'localcosmos-client';
+import type { TaxonProfiles, TaxonProfile, Taxon, ImageWithTextAndLicence, Features, TemplateContent } from 'localcosmos-client';
 import { useLanguageStore } from '@/stores/language';
 import { useTabsStore } from '@/stores/tabs';
 import type { TabButtonDefinition } from '@/types/navigation';
 import { TabButtonType } from '@/types/navigation';
-import type { TemplateContentPreviewData } from '@/types/template-content';
+import type { ContentVideo, TemplateContentPreviewData } from '@/types/template-content';
 
 import ImageCarousel from '@/components/images/ImageCarousel.vue';
 import TabbedPage from '@/components/container/TabbedPage.vue';
@@ -20,6 +20,7 @@ import TaxonRelationship from '@/components/taxon-profiles/TaxonRelationship.vue
 import LargeCard from '@/components/container/LargeCard.vue';
 import TemplateContentPreview from '@/components/template-content/TemplateContentPreview.vue';
 import ImageCard from '@/components/ui/ImageCard.vue';
+import VideoEmbed from '@/components/template-content/VideoEmbed.vue';
 
 import { useTemplateContent } from '@/composables/useTemplateContent';
 import TaxonProfileLink from '@/components/ui/TaxonProfileLink.vue';
@@ -33,13 +34,17 @@ const router = useRouter();
 
 const features = inject('features') as Features;
 const taxonProfiles = inject('taxonProfiles') as TaxonProfiles;
+const templateContent = inject('templateContent') as TemplateContent;
 
 const languageStore = useLanguageStore();
 
 const { fetchTemplateContent } = useTemplateContent();
 const mainNavigation = useMainNavigationStore();
 
+const VIDEO_TEMPLATE_NAME = 'video-story';
+
 const taxonProfile = ref<TaxonProfile | null>(null);
+const videos = ref<ContentVideo[]>([]);
 const hasTaxonRelationships = ref<boolean>(false);
 const templateContentLinks = ref<TemplateContentPreviewData[]>([]);
 const taxon = ref<Taxon | null>(null);
@@ -73,6 +78,24 @@ const tabButtons:TabButtonDefinition[] = [
 ];
 
 const initialTab = ref<number>(1);
+
+const loadVideos = async (taxon: Taxon) => {
+  const videoSlugs = await templateContent.getTaxonTemplateContentSlugsByTemplateName(VIDEO_TEMPLATE_NAME, taxon);
+  // loa dall video urls for each slug
+  const videoStories = await Promise.all(videoSlugs.map(async (data) => {
+    const slug = data.slug;
+    const videoStory = await fetchTemplateContent(slug);
+    if (videoStory.templateData && videoStory.templateData.contents.video) {
+      const video = videoStory.templateData.contents.video as ContentVideo;
+      return video;
+    } else {
+      return null;
+    }
+  }));
+  // filter out null values
+  videos.value = videoStories.filter((video) => video !== null) as ContentVideo[];
+
+};
 
 const loadTaxonProfile = async (nameUuid: string) => {
   const tabsStore = useTabsStore();
@@ -112,6 +135,9 @@ const loadTaxonProfile = async (nameUuid: string) => {
       hasTexts.value = true;
     }
 
+    // load videos
+    await loadVideos(taxon.value);
+
     pending.value = false;
 
     // check which buttons to display
@@ -139,17 +165,21 @@ const loadTaxonProfile = async (nameUuid: string) => {
       tabButtons.push({ text: t('taxonProfiles.TemplateContents'), tabIndex: 5, type: TabButtonType.STANDARD });
       // prepare template content links
       data.templateContents.forEach( async (tc) => {
-        const tcData = await fetchTemplateContent(tc.slug);
-        if (tcData) {
-          const previewData: TemplateContentPreviewData = {
-            title: tcData.title,
-            templateName: tcData.templateName,
-            slug: tc.slug,
-            previewImage: tcData.previewImage ? tcData.previewImage : null,
-            featuredImage: tcData.featuredImage ? tcData.featuredImage : null,
-            abstract: tcData.abstract ? tcData.abstract : null,
-          };
-          templateContentLinks.value.push(previewData);
+        const tcResult = await fetchTemplateContent(tc.slug);
+        if (tcResult.templateData != null) {
+          const tcData = tcResult.templateData;
+        
+          if (tcData) {
+            const previewData: TemplateContentPreviewData = {
+              title: tcData.title,
+              templateName: tcData.templateName,
+              slug: tc.slug,
+              previewImage: tcData.previewImage ? tcData.previewImage : null,
+              featuredImage: tcData.featuredImage ? tcData.featuredImage : null,
+              abstract: tcData.abstract ? tcData.abstract : null,
+            };
+            templateContentLinks.value.push(previewData);
+          }
         }
       });
     }
@@ -225,6 +255,18 @@ watch(() => props.nameUuid, async (newNameUuid) => {
                       :images="images"
                       :safe-center="true"
                     />
+                  </div>
+                </div>
+
+                <div v-if="videos" class="container-md page-padding-x">
+                  <div class="video-list">
+                    <div
+                      v-for="video in videos"
+                      :key="video.url"
+                      class="video-item"
+                    >
+                      <VideoEmbed :video="video" />
+                    </div>
                   </div>
                 </div>
                 

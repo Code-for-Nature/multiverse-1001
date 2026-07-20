@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import type { Page } from 'localcosmos-client';
 import type { ArticleStream } from '@/types/template-content';
-import { fetchTemplateContent } from '@/composables/fetchTemplateContent';
+import type { Page } from 'localcosmos-client';
+import { useTemplateContent } from '@/composables/useTemplateContent';
+import type { TemplateContentSource } from '@/composables/useTemplateContent';
 import TemplateContentContainer from '@/components/container/TemplateContentContainer.vue';
 import { useRouter } from 'vue-router';
 
@@ -15,12 +16,14 @@ import LinkedTaxonProfilesList from '@/components/template-content/LinkedTaxonPr
 import LargeCard from '@/components/container/LargeCard.vue';
 
 const router = useRouter();
+const { fetchTemplateContent } = useTemplateContent();
 
 const loading = ref<boolean>(true);
 
 const route = useRoute();
 const slug = route.params.slug as string; 
-const templateData = ref<Page| null>(null);
+const templateData = ref<Page | null>(null);
+const templateSource = ref<TemplateContentSource | null>(null);
 
 const contentStream = ref<ArticleStream>([]);
 
@@ -37,7 +40,7 @@ const getPropsForType = (item: any) => {
     case 'Video':
       return { video: item };
     case 'TextBlock':
-      return { textBlock: item };
+      return { textBlock: item, templateSource: templateSource.value };
     case 'Heading':
       return { heading: item };
     default:
@@ -46,7 +49,8 @@ const getPropsForType = (item: any) => {
 };
 
 onMounted(async() => {
-  templateData.value  = await fetchTemplateContent(slug);
+  const result  = await fetchTemplateContent(slug);
+  templateData.value = result.templateData;
   if (templateData.value) {
     contentStream.value = templateData.value.contents.content as ArticleStream || [];
   }

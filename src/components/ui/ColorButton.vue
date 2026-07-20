@@ -1,9 +1,11 @@
 <script setup lang="ts">
-
 const props = defineProps<{
   text: string,
   size?: 'small' | 'medium' | 'big',
   type?: 'default' | 'success' | 'danger' | 'error'
+  bgColor?: string,
+  textColor?: string,
+  hoverBgColor?: string,
 }>();
 
 const sizeClass =
@@ -19,10 +21,19 @@ const typeClass =
     : props.type === 'danger' || props.type === 'error'
     ? 'btn-danger'
     : 'btn-default';
+
+const colorStyle = {
+  '--pill-bg': props.bgColor,
+  '--pill-hover-bg': props.hoverBgColor,
+  '--pill-color': props.textColor,
+};
 </script>
 
 <template>
-  <div :class="['pill-link', sizeClass, typeClass, 'bg-translucent-light']">
+  <div
+    :class="['pill-link', sizeClass, typeClass, 'bg-translucent-light']"
+    :style="colorStyle"
+  >
     <slot name="left" />
     <div v-html="text" class="button-text" />
     <slot name="right" />
@@ -31,32 +42,39 @@ const typeClass =
 
 <style scoped>
 .pill-link {
-  font-weight: 500;
-  box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
+  font-weight: 700;
   font-size: 14px;
+  letter-spacing: 1px;
   padding: 8px 20px;
   border-radius: 5em;
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   gap: 4px;
   text-decoration: none;
   cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: var(--pill-bg);
+  color: var(--pill-color);
 }
 
-/* Types */
+.pill-link:hover {
+  background-color: var(--pill-hover-bg, var(--pill-bg));
+}
+
+/* Types — define default CSS vars consumed by .pill-link */
 .btn-default {
-  background: var(--color-white-translucent);
-  color: #222;
+  --pill-bg: var(--color-white-translucent);
+  --pill-color: #222;
 }
 .btn-success {
-  background: var(--color-success);
-  color: #fff;
+  --pill-bg: var(--color-success);
+  --pill-color: #fff;
 }
 .btn-danger {
-  background: var(--color-error);
-  color: #fff;
+  --pill-bg: var(--color-error);
+  --pill-color: #fff;
 }
 
 /* Sizes */
@@ -66,7 +84,7 @@ const typeClass =
 }
 
 .pill-link.medium {
-  font-size: 14px;
+  font-size: 12px;
   padding: 8px 20px;
 }
 
@@ -78,6 +96,8 @@ const typeClass =
 .button-text {
   text-decoration: none;
   color: inherit;
+  font-family: var(--font-family-colorbutton);
+  font-weight: 700;
 }
 
 @media (min-width: 365px) {
@@ -86,7 +106,7 @@ const typeClass =
     padding: 7px 16px;
   }
   .pill-link.medium {
-    font-size: 15px;
+    font-size: 14px;
     padding: 10px 24px;
   }
   .pill-link.big {

@@ -8,6 +8,7 @@ import { getTodaysHero } from '@/composables/getTodaysHero';
 
 import TaxonProfileLink from './ui/TaxonProfileLink.vue';
 import HeroCard from './ui/HeroCard.vue';
+import HeroPoster from './ui/HeroPoster.vue';
 
 import LoadingSpinner from './ui/LoadingSpinner.vue';
 
@@ -29,70 +30,46 @@ onMounted(async()=>{
 </script>
 
 <template>
-  <div class="min-h-full page-padding container">
-    <div v-if="loading">
+  <div class="min-h-full">
+    <div v-if="loading" class="page-padding container">
       <LoadingSpinner />
     </div>
     <div v-else class="margin-bottom">
-      <div>
-        <h1 class="mb-lg">{{ $t("Today's Wonder") }}</h1>
-      </div>
-      <div
-        v-if="todaysHero"
-        class="hero"
-      >
-        <TaxonProfileLink :taxon="todaysHero" class="nolinkstyle">
-          <HeroCard :image="todaysHero.image" :show-caption="false">
-            <template #title>
-              <div class="text-center mb-lg">
-                <h2>
-                  <VernacularName
-                    :taxon-latname="todaysHero.taxonLatname"
-                    :taxon-author="todaysHero.taxonAuthor"
-                    :hide-taxon-author="true"
-                  />
-                </h2>
-                <div class="text-muted font-narrow">
-                  <i>{{ todaysHero.taxonLatname }}</i>
-                </div>
-              </div>
-            </template>
-            <div v-if="todaysHero.shortProfile" class="text-justify">
-              <div v-html="todaysHero.shortProfile" class="pt-m" />
-            </div>
-          </HeroCard>
-        </TaxonProfileLink>
-      </div>
-      <div
-        v-if="randomTaxa.length"
-        class="mt-2xl"
-      >
-        <div class="mb-lg">
-          <h1>{{ $t('Have you heard of it?') }}</h1>
-        </div>
-        <div class="random-taxa">
-          <div
-            v-for="(taxon, counter) in randomTaxa"
-            :key="counter"
-          >
-            <TaxonProfileLink
-              :taxon="taxon"
-              class="nolinkstyle"
+      
+      <HeroPoster v-if="todaysHero" :hero="todaysHero" />
+
+      <div class="page-padding container">
+        <div
+          v-if="randomTaxa.length"
+          class="mt-2xl"
+        >
+          <div class="mb-lg">
+            <h1>{{ $t('Have you heard of it?') }}</h1>
+          </div>
+          <div class="random-taxa">
+            <div
+              v-for="(taxon, counter) in randomTaxa"
+              :key="counter"
             >
-              <ImageCard :image="taxon.image" :show-caption="false">
-                <TaxonName
-                  :taxon-latname="taxon.taxonLatname"
-                  :taxon-author="taxon.taxonAuthor"
-                  :hide-taxon-author="true"
-                  :narrow="true"
-                >
-                </TaxonName>
-              </ImageCard>
-            </TaxonProfileLink>
+              <TaxonProfileLink
+                :taxon="taxon"
+                class="nolinkstyle"
+              >
+                <ImageCard :image="taxon.image" :show-caption="false">
+                  <TaxonName
+                    :taxon-latname="taxon.taxonLatname"
+                    :taxon-author="taxon.taxonAuthor"
+                    :hide-taxon-author="true"
+                    :narrow="true"
+                  >
+                  </TaxonName>
+                </ImageCard>
+              </TaxonProfileLink>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      </div>
   </div>
 </template>
 

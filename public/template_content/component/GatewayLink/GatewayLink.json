@@ -1,0 +1,22 @@
+{
+    "templateName" : "GatewayLink",
+    "type": "component",
+    "version" : 1,
+    "identifierContent": "pageLink",
+    "contents": {
+      "image": {
+        "type": "image",
+        "helpText": "Approximately 16:9. This image will be shown as the link background."
+      },
+      "pageLink": {
+        "type": "templateContentLink",
+        "required": true
+      },
+      "linkName": {
+        "type": "text",
+        "required": true,
+        "widget": "TextInput",
+        "helpText": "Name of the link to the page"
+      }
+    }
+  }

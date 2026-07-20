@@ -1,0 +1,17 @@
+{
+    "templateName" : "VideoPreview",
+    "type": "component",
+    "version" : 1,
+    "identifierContent": "title",
+    "contents": {
+      "video": {
+        "type": "templateContentLink",
+        "required": true
+      },
+      "title": {
+        "type": "text",
+        "required": true,
+        "widget": "TextInput"
+      }
+    }
+  }

@@ -1,7 +1,7 @@
 {
   "templateName" : "Story",
   "type": "page",
-  "templatePath" : "/template_content/page/text/text.html",
+  "templatePath" : "/template_content/page/story/story.json",
   "version" : 1,
   "contents": {
     "previewImage": {
@@ -17,7 +17,7 @@
     "abstract": {
       "type": "text",
       "helpText": "A short summary of the article. This will be shown in article lists and previews.",
-      "required": true
+      "required": false
     },
     "videos": {
       "type": "component",

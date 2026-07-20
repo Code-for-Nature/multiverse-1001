@@ -1,7 +1,7 @@
 {
   "templateName" : "text",
   "type": "page",
-  "templatePath" : "/template_content/page/text/text.html",
+  "templatePath" : "/template_content/page/text/text.json",
   "version" : 1,
   "contents": {
     "text": {

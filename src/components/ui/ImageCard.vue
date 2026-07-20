@@ -10,11 +10,11 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="card bg-translucent-light padding-medium">
+  <div class="card bg-translucent-light">
     <div>
-      <ImageWithLicence :image="image" rounded="rounded" :show-caption="showCaption" />
+      <ImageWithLicence :image="image" rounded="sharp" :show-caption="showCaption" />
     </div>
-    <div class="card-content">
+    <div class="card-content padding-medium">
       <slot></slot>
     </div>
     
@@ -23,12 +23,12 @@ const props = defineProps<{
 
 <style scoped>
 .card {
-  border-radius: var(--border-radius-sm);
+  /*border-radius: var(--border-radius-sm);*/
   box-shadow: var(--box-shadow);
   width: 100%;
 }
 
 .card-content {
-  padding: var(--size-md) 0 0 0;
+  /*padding: var(--size-md) 0 0 0;*/
 }
 </style>

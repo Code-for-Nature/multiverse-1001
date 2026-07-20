@@ -6,7 +6,13 @@ import { useMapStore } from '@/stores/map';
 import HomeView from '@/views/HomeView.vue';
 import TextView from '@/views/template-content/TextView.vue';
 import StoryView from '@/views/template-content/StoryView.vue';
+import VideoStoryView from '@/views/template-content/VideoStoryView.vue';
+import CollectionView from '@/views/template-content/CollectionView.vue';
+import VideoCollectionView from '@/views/template-content/VideoCollectionView.vue';
+import TaxonArticleCollectionView from '@/views/template-content/TaxonArticleCollectionView.vue';
+import ShortStoryView from '@/views/template-content/ShortStoryView.vue';
 import ArticleView from '@/views/template-content/ArticleView.vue';
+import GatewayView from '@/views/template-content/GatewayView.vue';
 import TaxonProfiles from '@/views/taxon-profiles/TaxonProfiles.vue';
 import TaxonProfile from '@/views/taxon-profiles/TaxonProfile.vue';
 import ObservationsHub from '@/views/observations/ObservationsHub.vue';
@@ -22,7 +28,6 @@ import RegistrationView from '@/views/account/RegistrationView.vue';
 import RegistrationSuccessView from '@/views/account/RegistrationSuccessView.vue';
 import UserDeletionSuccess from '@/views/account/UserDeletionSuccess.vue';
 import PasswordReset from '@/views/account/PasswordReset.vue';
-import CollectionView from '@/views/template-content/CollectionView.vue';
 import ObservationFormView from '@/views/observations/ObservationFormView.vue';
 import ObservationFormsList from '@/views/observations/ObservationFormsList.vue';
 import PermissionDenied from '@/views/PermissionDenied.vue';
@@ -72,7 +77,7 @@ const router = createRouter({
       }
     },
     {
-      path: '/pages/text/:slug',
+      path: '/pages/text/:slug/',
       name: 'text',
       component: TextView,
       meta: {
@@ -81,7 +86,7 @@ const router = createRouter({
       }
     },
     {
-      path: '/pages/story/:slug',
+      path: '/pages/story/:slug/',
       name: 'story',
       component: StoryView,
       meta: {
@@ -90,7 +95,7 @@ const router = createRouter({
       }
     },
     {
-      path: '/pages/article/:slug',
+      path: '/pages/article/:slug/',
       name: 'article',
       component: ArticleView,
       meta: {
@@ -99,9 +104,54 @@ const router = createRouter({
       }
     },
     {
-      path: '/pages/collection/:slug',
+      path: '/pages/collection/:slug/',
       name: 'collection',
       component: CollectionView,
+      meta: {
+        headerMode: 'auto',
+        showBackbutton: true,
+      }
+    },
+    {
+      path: '/pages/taxon-article-collection/:slug/',
+      name: 'taxon-article-collection',
+      component: TaxonArticleCollectionView,
+      meta: {
+        headerMode: 'auto',
+        showBackbutton: true,
+      }
+    },
+    { 
+      path: '/pages/short-story/:slug/',
+      name: 'short-story',
+      component: ShortStoryView,
+      meta: {
+        headerMode: 'auto',
+        showBackbutton: true,
+      }
+     },
+    {
+      path: '/pages/gateway/:slug/',
+      name: 'gateway',
+      component: GatewayView,
+      meta: {
+        headerMode: 'auto',
+        showBackbutton: true,
+      }
+    },
+    {
+      path: '/pages/video-story/:slug/',
+      name: 'video-story',
+      component: VideoStoryView,
+      meta: {
+        headerMode: 'auto',
+        showBackbutton: true,
+      }
+    },
+    {
+      path: '/pages/video-collection/:slug/',
+      name: 'video-collection',
+      component: VideoCollectionView,
       meta: {
         headerMode: 'auto',
         showBackbutton: true,
@@ -394,7 +444,7 @@ const router = createRouter({
       component: PrivacySettings,
       meta: {
         title: 'pageTitles.PrivacySettings',
-        headerMode: 'title',
+        headerMode: 'none',
         showBackbutton: true,
       }
     },

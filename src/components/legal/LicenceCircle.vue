@@ -77,7 +77,7 @@ const hideBubble = (event: Event) => {
 .licence-circle {
   width: 23px;
   aspect-ratio: 1/1;
-  border-radius: 50% 0 var(--border-radius-xs) 0;
+  border-radius: 50% 0 0 0;
   background: rgba(240,240,240);
   display: flex;
   flex-direction: row;

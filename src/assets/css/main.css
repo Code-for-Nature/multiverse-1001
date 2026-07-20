@@ -48,6 +48,8 @@ body.has-app-background .bootloader {
   padding: var(--size-xl);
 }
 
+.rail-padding {}
+
 .page-padding-y {
   padding-top: var(--size-xl);
   padding-bottom: calc(var(--size-xl) + var(--size-xl) + env(safe-area-inset-bottom, 0px) + var(--bottom-navigation-height));
@@ -554,6 +556,10 @@ input[type="text"] {
     margin-left: var(--navigation-rail-width);
   }
 
+  .rail-padding {
+    padding-left: var(--navigation-rail-width);
+  }
+
   /* the carousel container has to span full width minus navigation rail, without padding.
       Otherwise the image would have an ugly scrolling edge where they "disappear"
   */
@@ -568,6 +574,13 @@ input[type="text"] {
   }
 
   .page-padding {
+    padding-top: var(--size-xl);
+    padding-left: var(--size-xl);
+    padding-bottom: var(--size-xl);
+    padding-right: var(--size-xl);
+  }
+
+  .page-padding-5xl {
     padding-top: var(--size-xl);
     padding-left: var(--size-xl);
     padding-bottom: var(--size-xl);
@@ -635,6 +648,10 @@ input[type="text"] {
     padding-left: var(--size-xl);
     padding-bottom: calc(var(--size-xl) + env(safe-area-inset-bottom, 0px) + var(--bottom-navigation-height));
     padding-right: var(--size-xl);
+  }
+
+  .rail-padding {
+    padding-left: 0;
   }
 
   .subheader-page-padding {

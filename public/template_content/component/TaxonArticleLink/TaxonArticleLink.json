@@ -1,0 +1,34 @@
+{
+    "templateName" : "TaxonArticleLink",
+    "type": "component",
+    "version" : 1,
+    "identifierContent": "pageLink",
+    "contents": {
+      "image": {
+        "type": "image",
+        "helpText": "Approximately 16:9. This image will be shown as the link background."
+      },
+      "pageLink": {
+        "type": "templateContentLink",
+        "required": true
+      },
+      "linkName": {
+        "type": "text",
+        "required": true,
+        "widget": "TextInput",
+        "helpText": "Will be shown below the image"
+      },
+      "imageText": {
+        "type": "text",
+        "required": false,
+        "widget": "TextInput",
+        "helpText": "Optional text to overlay on the image"
+      },
+      "scientificName": {
+        "type": "text",
+        "helpText": "The scientific name of the species. This will be shown below link name",
+        "required": false,
+        "widget": "TextInput"
+      }
+    }
+  }

@@ -1,0 +1,373 @@
+@font-face {
+	font-family: 'Bricolage Grotesque';
+	src: url('/fonts/Bricolage_Grotesque/BricolageGrotesque-VariableFont_opsz,wdth,wght.ttf') format('truetype variations');
+	font-style: normal;
+	font-weight: 200 800;
+	font-display: swap;
+}
+
+/* Quincy CF */
+@font-face {
+	font-family: 'Quincy CF';
+	src: url('/fonts/Quincy%20CF%20Webfont/QuincyCF-Thin.woff2') format('woff2'),
+	     url('/fonts/Quincy%20CF%20Webfont/QuincyCF-Thin.woff') format('woff');
+	font-style: normal;
+	font-weight: 100;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Quincy CF';
+	src: url('/fonts/Quincy%20CF%20Webfont/QuincyCF-ThinItalic.woff2') format('woff2'),
+	     url('/fonts/Quincy%20CF%20Webfont/QuincyCF-ThinItalic.woff') format('woff');
+	font-style: italic;
+	font-weight: 100;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Quincy CF';
+	src: url('/fonts/Quincy%20CF%20Webfont/QuincyCF-Light.woff2') format('woff2'),
+	     url('/fonts/Quincy%20CF%20Webfont/QuincyCF-Light.woff') format('woff');
+	font-style: normal;
+	font-weight: 300;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Quincy CF';
+	src: url('/fonts/Quincy%20CF%20Webfont/QuincyCF-LightItalic.woff2') format('woff2'),
+	     url('/fonts/Quincy%20CF%20Webfont/QuincyCF-LightItalic.woff') format('woff');
+	font-style: italic;
+	font-weight: 300;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Quincy CF';
+	src: url('/fonts/Quincy%20CF%20Webfont/QuincyCF-Text.woff2') format('woff2'),
+	     url('/fonts/Quincy%20CF%20Webfont/QuincyCF-Text.woff') format('woff');
+	font-style: normal;
+	font-weight: 350;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Quincy CF';
+	src: url('/fonts/Quincy%20CF%20Webfont/QuincyCF-TextItalic.woff2') format('woff2'),
+	     url('/fonts/Quincy%20CF%20Webfont/QuincyCF-TextItalic.woff') format('woff');
+	font-style: italic;
+	font-weight: 350;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Quincy CF';
+	src: url('/fonts/Quincy%20CF%20Webfont/QuincyCF-Regular.woff2') format('woff2'),
+	     url('/fonts/Quincy%20CF%20Webfont/QuincyCF-Regular.woff') format('woff');
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Quincy CF';
+	src: url('/fonts/Quincy%20CF%20Webfont/QuincyCF-RegularItalic.woff2') format('woff2'),
+	     url('/fonts/Quincy%20CF%20Webfont/QuincyCF-RegularItalic.woff') format('woff');
+	font-style: italic;
+	font-weight: 400;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Quincy CF';
+	src: url('/fonts/Quincy%20CF%20Webfont/QuincyCF-Medium.woff2') format('woff2'),
+	     url('/fonts/Quincy%20CF%20Webfont/QuincyCF-Medium.woff') format('woff');
+	font-style: normal;
+	font-weight: 500;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Quincy CF';
+	src: url('/fonts/Quincy%20CF%20Webfont/QuincyCF-MediumItalic.woff2') format('woff2'),
+	     url('/fonts/Quincy%20CF%20Webfont/QuincyCF-MediumItalic.woff') format('woff');
+	font-style: italic;
+	font-weight: 500;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Quincy CF';
+	src: url('/fonts/Quincy%20CF%20Webfont/QuincyCF-Bold.woff2') format('woff2'),
+	     url('/fonts/Quincy%20CF%20Webfont/QuincyCF-Bold.woff') format('woff');
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Quincy CF';
+	src: url('/fonts/Quincy%20CF%20Webfont/QuincyCF-BoldItalic.woff2') format('woff2'),
+	     url('/fonts/Quincy%20CF%20Webfont/QuincyCF-BoldItalic.woff') format('woff');
+	font-style: italic;
+	font-weight: 700;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Quincy CF';
+	src: url('/fonts/Quincy%20CF%20Webfont/QuincyCF-ExtraBold.woff2') format('woff2'),
+	     url('/fonts/Quincy%20CF%20Webfont/QuincyCF-ExtraBold.woff') format('woff');
+	font-style: normal;
+	font-weight: 800;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Quincy CF';
+	src: url('/fonts/Quincy%20CF%20Webfont/QuincyCF-ExtraBoldItalic.woff2') format('woff2'),
+	     url('/fonts/Quincy%20CF%20Webfont/QuincyCF-ExtraBoldItalic.woff') format('woff');
+	font-style: italic;
+	font-weight: 800;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Quincy CF';
+	src: url('/fonts/Quincy%20CF%20Webfont/QuincyCF-Black.woff2') format('woff2'),
+	     url('/fonts/Quincy%20CF%20Webfont/QuincyCF-Black.woff') format('woff');
+	font-style: normal;
+	font-weight: 900;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Quincy CF';
+	src: url('/fonts/Quincy%20CF%20Webfont/QuincyCF-BlackItalic.woff2') format('woff2'),
+	     url('/fonts/Quincy%20CF%20Webfont/QuincyCF-BlackItalic.woff') format('woff');
+	font-style: italic;
+	font-weight: 900;
+	font-display: swap;
+}
+
+/* Public Sans */
+@font-face {
+	font-family: 'Public Sans';
+	src: url('/fonts/Public_Sans/PublicSans-VariableFont_wght.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Public Sans';
+	src: url('/fonts/Public_Sans/PublicSans-Italic-VariableFont_wght.ttf') format('truetype');
+	font-style: italic;
+	font-weight: 100 900;
+	font-display: swap;
+}
+
+/* Lusitana */
+@font-face {
+	font-family: 'Lusitana';
+	src: url('/fonts/Lusitana/Lusitana-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Lusitana';
+	src: url('/fonts/Lusitana/Lusitana-Bold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+}
+
+/* SK Modernist */
+@font-face {
+	font-family: 'SK Modernist';
+	src: url('/fonts/Sk-Modernist%20Webfont/sk-modernist-light-webfont.woff2') format('woff2'),
+	     url('/fonts/Sk-Modernist%20Webfont/sk-modernist-light-webfont.woff') format('woff');
+	font-style: normal;
+	font-weight: 300;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'SK Modernist';
+	src: url('/fonts/Sk-Modernist%20Webfont/sk-modernist-regular-webfont.woff2') format('woff2'),
+	     url('/fonts/Sk-Modernist%20Webfont/sk-modernist-regular-webfont.woff') format('woff');
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'SK Modernist';
+	src: url('/fonts/Sk-Modernist%20Webfont/sk-modernist-bold-webfont.woff2') format('woff2'),
+	     url('/fonts/Sk-Modernist%20Webfont/sk-modernist-bold-webfont.woff') format('woff');
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'SK Modernist Mono';
+	src: url('/fonts/Sk-Modernist%20Webfont/sk-modernist-mono-webfont.woff2') format('woff2'),
+	     url('/fonts/Sk-Modernist%20Webfont/sk-modernist-mono-webfont.woff') format('woff');
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+}
+
+:root {
+  --font-serif-1001: 'Times New Roman Custom', 'Times New Roman', sans-serif;
+  --font-lusitana-1001: 'Lusitana', serif;
+  --font-quincy-1001: 'Quincy CF', sans-serif;
+  --font-grotesque-1001: 'Bricolage Grotesque', sans-serif;
+  --font-public-sans-1001: 'Public Sans', sans-serif;
+  --font-sk-modernist-1001: 'SK Modernist', sans-serif;
+  --font-sk-modernist-mono-1001: 'SK Modernist Mono', monospace;
+  --sea-change-yellow: #d3b850; /* rgb(211, 184, 80) */
+  --sea-change-blue: #032a31;
+  --sea-change-light-blue: #e6f1f3;
+  --sea-change-purple: #9b7095;
+  --sea-change-turquoise: #5b949c;
+  --sea-change-dark-green: #0e373b;
+  --sea-change-dark-turquoise: #0e464c; /* rgb(14, 70, 76) */
+  --sea-change-light-turquoise-hover: #d0e4b8;
+  --sea-change-light-turquoise: #a9cfd0;
+  --sea-change-light-green: rgb(222, 238, 202);
+  --sea-change-dark: #021317;
+  --sea-change-dark-blue: rgb(8, 14, 40);
+  --sea-change-grey: #F4F4F4;
+  --font-family-primary: var(--font-serif-1001);
+  --font-family-tight: var(--font-sk-modernist-1001);
+  --font-family-colorbutton: var(--font-sk-modernist-1001);
+  --bottom-navigation-offset-bottom: 0px;
+  --box-shadow: 0 0 5px 0 rgba(0,0,0,.2);
+}
+
+
+html, body {
+  font-family: var(--font-public-sans-1001);
+  font-size: 16px;
+  color: var(--sea-change-dark);
+}
+
+a.nolinkstyle, a.nolinkstyle:visited {
+  color: var(--sea-change-dark);
+}
+
+h1 {
+  font-family: var(--font-lusitana-1001);
+  font-size: 38px;
+  font-weight: 400;
+  color: var(--sea-change-dark-turquoise);
+}
+
+h2 {
+  font-family: var(--font-lusitana-1001);
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--sea-change-dark-turquoise);
+}
+
+.sea-change-h2 {
+  font-family: var(--font-grotesque-1001);
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--sea-change-yellow);
+  text-transform: uppercase;
+}
+
+h3 {
+  font-family: var(--font-quincy-1001);
+  font-size: 20px;
+  font-weight: 400;
+}
+
+#BottomNavigation {
+  left: 0 !important;
+  right: 0 !important;
+  border-radius: 0 !important;
+}
+
+.rail-header-title {
+  font-family: var(--font-grotesque-1001);
+  text-transform: uppercase;
+  color: var(--sea-change-blue);
+}
+
+.burger-menu {
+  color: var(--sea-change-light-turquoise);
+  background-color: var(--sea-change-dark-green);
+  background-image: linear-gradient(190deg, rgb(3, 42, 49) 50%, rgb(1, 21, 24) 100%);
+}
+
+a.burger-link {
+	text-transform: uppercase;
+	color: rgb(242, 252, 247);
+	font-weight: 700;
+}
+
+a.burger-link, a.burger-link:visited {
+  color: rgb(242, 252, 247);
+  font-weight: 700;
+}
+
+.burger-menu.open .burger-button {
+  background-color: var(--sea-change-dark-green) !important;
+}
+
+.burger-section-separator {
+  border-bottom: 2px solid rgb(14, 70, 76) !important;
+}
+
+.tab-button.active {
+  color: var(--sea-change-light-blue) !important;
+  background: var(--sea-change-blue) !important;
+}
+
+.tab-button {
+  font-family: var(--font-family-tight);
+  text-transform: uppercase;
+}
+
+.tab-button .tab-text {
+	font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.article-container {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+}
+
+@media (min-width: 768px) {
+  .article-container {
+    width: calc(768px - var(--navigation-rail-width));
+  }
+}
+
+@media (min-width: 1024px) {
+  .tab-button {
+    font-size: 16px;
+  }
+
+  .article-container {
+    width: 800px;
+  }
+}
+
+@media (min-width: 1280px) {
+}
+
+@media (min-width: 1536px) {
+}

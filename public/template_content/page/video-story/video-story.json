@@ -1,0 +1,14 @@
+{
+  "templateName" : "video-story",
+  "type": "page",
+  "templatePath" : "/template_content/page/video-story/video-story.json",
+  "version" : 1,
+  "contents": {
+    "video": {
+      "type": "component",
+      "templateName": "Video",
+      "required": true,
+      "allowMultiple": false
+    }
+  }
+}

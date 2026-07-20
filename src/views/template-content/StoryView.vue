@@ -3,27 +3,33 @@ import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import type { Page } from 'localcosmos-client';
 import type { ContentParagraph, ContentVideo } from '@/types/template-content';
-import { fetchTemplateContent } from '@/composables/fetchTemplateContent';
+import { useTemplateContent } from '@/composables/useTemplateContent';
+import type { TemplateContentSource } from '@/composables/useTemplateContent';
 import TemplateContentContainer from '@/components/container/TemplateContentContainer.vue';
 import ImageWithLicence from '@/components/images/ImageWithLicence.vue';
 import VideoEmbed from '@/components/template-content/VideoEmbed.vue';
 import LargeCard from '@/components/container/LargeCard.vue';
 import { useRouter } from 'vue-router';
+
+
 const router = useRouter();
+const { fetchTemplateContent } = useTemplateContent();
 
 const loading = ref<boolean>(true);
 
 const route = useRoute();
 const slug = route.params.slug as string; 
 const templateData = ref<Page| null>(null);
-
+const templateSource = ref<TemplateContentSource | null>(null);
 
 
 const paragraphs = ref<ContentParagraph[]>([]);
 const videos = ref<ContentVideo[]>([]);
 
 onMounted(async() => {
-  templateData.value  = await fetchTemplateContent(slug);
+  const result = await fetchTemplateContent(slug);
+  templateData.value = result.templateData;
+  templateSource.value = result.source;
   if (templateData.value) {
     paragraphs.value = templateData.value.contents.paragraph || [];
     videos.value = templateData.value.contents.videos || [];
@@ -64,7 +70,8 @@ onMounted(async() => {
                     :image="paragraph.image"
                     :show-caption="true"
                     :is-template-content-image="true"
-                    rounded="rounded"
+                    :template-content-source="templateSource"
+                    rounded="sharp"
                   />
                 </div>
               </div>

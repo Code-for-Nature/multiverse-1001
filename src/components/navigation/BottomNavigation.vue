@@ -25,7 +25,7 @@ const navigations = inject('navigations') as Navigations;
   </nav>
 </template>
 
-<style scoped>
+<style>
 #BottomNavigation {
   position: fixed;
   z-index: var(--layer-1);

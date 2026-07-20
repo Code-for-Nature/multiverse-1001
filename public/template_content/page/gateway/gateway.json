@@ -1,0 +1,13 @@
+{
+  "templateName" : "Gateway",
+  "type": "page",
+  "templatePath" : "/template_content/page/gateway/gateway.json",
+  "version" : 1,
+  "contents": {
+    "pageLink" : {
+      "type": "component",
+      "templateName": "GatewayLink",
+      "allowMultiple": true
+    }
+  }
+}

@@ -61,6 +61,5 @@ watch(
 
 <style scoped>
 .taxon-search-result {
-  margin-bottom: var(--size-xs);
 }
 </style>

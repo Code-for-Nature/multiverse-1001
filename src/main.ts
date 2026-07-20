@@ -2,6 +2,7 @@ import 'vue-final-modal/style.css';
 import 'ol/ol.css';
 import 'vue-awesome-paginate/dist/style.css';
 import './assets/css/main.css';
+import './assets/css/1001.css';
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
@@ -10,7 +11,7 @@ import App from './App.vue';
 import router from './router';
 
 import type { Features, Frontend, FrontendSettings } from 'localcosmos-client';
-import { LocalCosmosApi, Glossary, BackboneTaxonomy, TaxonProfiles, LicenceRegistry } from 'localcosmos-client';
+import { LocalCosmosApi, Glossary, BackboneTaxonomy, TaxonProfiles, TemplateContent, LicenceRegistry } from 'localcosmos-client';
 import { useAuthStore } from '@/stores/auth';
 import { useCookieConsentStore } from './stores/cookie-consent';
 
@@ -370,6 +371,13 @@ const onDeviceReady = (async () => {
 
     if (features.GenericForm && features.GenericForm.list.length > 0){
       accountsEnabled = true;
+    }
+
+    if (features.TemplateContent) {
+      setBootloaderText('loading template content');
+      const templateContent = new TemplateContent(features.TemplateContent);
+      await templateContent.load(languageStore.currentLanguage);
+      app.provide('templateContent', templateContent);
     }
 
   } else {

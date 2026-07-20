@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from 'vue';
-import type { ImageWithTextAndLicence } from 'localcosmos-client';
+import type { ImageWithTextAndLicence, ImageUrls } from 'localcosmos-client';
 import { imageUrlsToSrcSet } from '@/composables/imageUrlsToSrcSet';
-import { templateContentImageUrlsToSrcSet } from '@/composables/templateContentImageUrlsToSrcSet';
+import { useTemplateContent } from '@/composables/useTemplateContent';
+import type { TemplateContentSource } from '@/composables/useTemplateContent';
 import LicenceCircle from '@/components/legal/LicenceCircle.vue';
 
 import type { GestureEvent } from 'contactjs';
@@ -16,16 +17,26 @@ const props = withDefaults(defineProps<{
   altText?: string,
   showCaption?: boolean,
   isTemplateContentImage?: boolean, // If true, use different styling for template content images
+  templateContentSource?: TemplateContentSource | null, // Optional prop to pass the source for template content images
 }>(), {
   showCaption: true,
   isTemplateContentImage: false,
+  rounded: 'sharp',
 });
 
 const emit = defineEmits(['zoomed']); // Define the "zoomed" event
 
+const { templateContentImageUrlsToSrcSet } = useTemplateContent();
+
 const hasCaption: boolean = !!(props.showCaption && props.image.text);
 
-const srcSetFn = props.isTemplateContentImage ? templateContentImageUrlsToSrcSet : imageUrlsToSrcSet;
+const srcSetFn = (imageUrl: ImageUrls): string => {
+  if (props.isTemplateContentImage && props.templateContentSource) {
+    return templateContentImageUrlsToSrcSet(imageUrl, props.templateContentSource);
+  } else {
+    return imageUrlsToSrcSet(imageUrl);
+  }
+}
 
 const sharpLicenceCircle = !props.rounded || (hasCaption && (
   props.rounded === 'rounded' ||
@@ -434,7 +445,7 @@ onMounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 0 var(--size-md);
+  padding: var(--size-md) var(--size-md);
   background: rgba(0, 0, 0, 0.55);
   z-index: 2;
   pointer-events: none; /* Let pointer events pass through to the image */

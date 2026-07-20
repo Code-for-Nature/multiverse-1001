@@ -12,6 +12,7 @@ const props = defineProps<{
 
 const bubble = ref<HTMLElement>();
 const licenceRegistry = inject('licenceRegistry') as LicenceRegistry;
+const isInPreviewMode = inject<boolean>('isInPreviewMode', false);
 const loading = ref<boolean>(false);
 const loadedRegistry = ref<boolean>(false);
 
@@ -81,6 +82,13 @@ const positionBubble = () => {
 }
 
 const updateImageLicence = async () => {
+  if (isInPreviewMode) {
+    loading.value = false;
+    imageLicence.value = null;
+    imageLicenceLink.value = null;
+    return;
+  }
+
   if (props.imageUrl) {
     if (loadedRegistry.value === false) {
       loading.value = true;
@@ -115,8 +123,11 @@ onUpdated(async () => {
     id="licenceBubble"
     class="bg-solid"
   >
+    <div v-if="isInPreviewMode">
+      licences not avialable in preview mode
+    </div>
     <div
-      v-if="loading"
+      v-else-if="loading"
       class="loading-licences"
     >
       <div>

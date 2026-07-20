@@ -14,7 +14,7 @@ const props = defineProps<{
     :taxon="taxon"
     class="nolinkstyle"
   >
-    <div class="taxon-row bg-translucent-light rounded-sm">
+    <div class="taxon-row bg-translucent-light">
       <div class="taxon-name-container">
         <div>
           <div>
@@ -39,7 +39,7 @@ const props = defineProps<{
         
           <ImageWithLicence
             :image="taxon.image"
-            :rounded="'rounded-xs'"
+            :rounded="'sharp'"
             :title="taxon.name"
             :show-caption="false"
           />

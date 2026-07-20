@@ -2,22 +2,22 @@
     "NAME": "Bäume der Wälder Bayerns",
     "PACKAGE_NAME": "org.localcosmos.baumederwalderbayerns",
     "LANGUAGES": [
-        "de"
+        "en"
     ],
-    "PRIMARY_LANGUAGE": "de",
-    "APP_UID": "treesofbavaria",
-    "APP_UUID": "2dbc48ce-a922-4860-a540-825874a592eb",
+    "PRIMARY_LANGUAGE": "en",
+    "APP_UID": "seaforest",
+    "APP_UUID": "b3b4bb97-82dc-486d-9f71-e464d690e100",
     "APP_VERSION": 5,
     "BUILD_NUMBER": 13,
-    "API_URL": "http://treesofbavaria.tomwork.sisol:8080/api/",
-    "MEDIA_URL": "http://treesofbavaria.tomwork.sisol:8080/media/",
-    "SERVER_URL": "http://treesofbavaria.tomwork.sisol:8080/",
+    "API_URL": "http://treesofbavaria.tomwork.sisol:8000/api/",
+    "MEDIA_URL": "http://treesofbavaria.tomwork.sisol:8000/media/",
+    "SERVER_URL": "http://treesofbavaria.tomwork.sisol:8000/",
     "PREVIEW": false,
     "OPTIONS": {
         "allowAnonymousObservations": true,
         "doNotBuildLargeImages": false,
         "version": "1.0",
-        "localcosmosPrivateApiUrl": "http://localhost:8080/api/"
+        "localcosmosPrivateApiUrl": "http://localhost:8000/api/"
     },
     "frontend": "MultiverseBeta",
     "version": "0.7",

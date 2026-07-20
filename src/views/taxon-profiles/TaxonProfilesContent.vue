@@ -100,7 +100,7 @@ const getNewRandomTaxa = () => {
           <template #tab3>
             <div class="pt-m">
               <TaxonProfilesSearch
-                class="page-padding-x"
+                class=""
                 :search-text="searchText"
               />
             </div>

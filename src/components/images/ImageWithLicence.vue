@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import type { ImageWithTextAndLicence } from 'localcosmos-client';
+import type { ImageUrls, ImageWithTextAndLicence } from 'localcosmos-client';
 import { imageUrlsToSrcSet } from '@/composables/imageUrlsToSrcSet';
-import { templateContentImageUrlsToSrcSet } from '@/composables/templateContentImageUrlsToSrcSet';
+import { useTemplateContent } from '@/composables/useTemplateContent';
 import LicenceCircle from '@/components/legal/LicenceCircle.vue';
+import type { TemplateContentSource } from '@/composables/useTemplateContent';
+
+const { templateContentImageUrlsToSrcSet, templateContentImageUrl } = useTemplateContent();
 
 const props = withDefaults(defineProps<{
   image: ImageWithTextAndLicence,
@@ -12,6 +15,7 @@ const props = withDefaults(defineProps<{
   altText?: string,
   showCaption?: boolean,
   isTemplateContentImage?: boolean, // If true, use different styling for template content images
+  templateContentSource?: TemplateContentSource | null, // Optional prop to pass the source for template content images
 }>(),(
   {
     showCaption: true,
@@ -19,7 +23,21 @@ const props = withDefaults(defineProps<{
   }
 ));
 
-const srcSetFn = props.isTemplateContentImage ? templateContentImageUrlsToSrcSet : imageUrlsToSrcSet;
+const srcSetFn = (imageUrl: ImageUrls): string => {
+  if (props.isTemplateContentImage && props.templateContentSource) {
+    return templateContentImageUrlsToSrcSet(imageUrl, props.templateContentSource);
+  } else {
+    return imageUrlsToSrcSet(imageUrl);
+  }
+}
+
+const imageUrlFn = (imageUrl: string): string => {
+  if (props.isTemplateContentImage && props.templateContentSource) {
+    return templateContentImageUrl(imageUrl, props.templateContentSource);
+  } else {
+    return imageUrl;
+  }
+}
 
 const hasCaption: boolean = !!(props.showCaption && props.image.text);
 
@@ -40,7 +58,7 @@ const sharpLicenceCircle = !props.rounded || (hasCaption && (
     >
       <img
         loading="lazy"
-        :src="image.imageUrl['2x']"
+        :src="imageUrlFn(image.imageUrl['2x'])"
         :srcset="srcSetFn(image.imageUrl)"
         :sizes="sizes ? sizes : ''"
         :alt="altText ? altText : image.text ? image.text : ''"
@@ -106,22 +124,28 @@ const sharpLicenceCircle = !props.rounded || (hasCaption && (
   align-items: center;
   justify-content: flex-start;
   margin: 0;
-  padding: 0 0 0 var(--size-md);
-  background: var(--color-white-translucent-light);
-  color: #000;
+  padding: var(--size-xs) 0 var(--size-xs) var(--size-md);
+  background: var(--sea-change-dark-green);
+  color: var(--sea-change-light-blue);
   overflow: hidden; /* Hide overflowed content */
-  border-radius: 0 0 var(--border-radius-sm) var(--border-radius-sm); /* Match image rounding */
+  border-radius: 0; /* Match image rounding */
 }
 
 .caption-content {
+  display: flex;
+  align-items: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   flex: 1;
-  min-width: 0; /* ✅ Keep ellipsis experiment */
+  min-width: 0;
   font-family: 'RobotoCondensed';
   font-weight: 400;
   font-size: var(--font-size-md);
+}
+
+.caption-content :deep(p) {
+  margin: 0;
 }
 
 .caption-fade {
@@ -130,7 +154,7 @@ const sharpLicenceCircle = !props.rounded || (hasCaption && (
   top: 0;
   bottom: 0;
   width: 30px; /* Width of fade effect */
-  background: linear-gradient(to right, transparent 0%, #FFF 100%);
+  background: linear-gradient(to right, transparent 0%, var(--sea-change-dark-green) 100%);
   pointer-events: none; /* Allow clicks to pass through */
 }
 </style>

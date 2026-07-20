@@ -18,6 +18,9 @@ if (props.images && props.images.length) {
   displayedImages = props.images.slice(0, 3);
   //displayedImages = props.images;
 }
+
+const fontFamily = props.isTerminalNode === true ? 'var(--font-public-sans-1001)' : 'var(--font-quincy-1001)';
+const fontSize = props.isTerminalNode === true ? '16px' : '20px';
 </script>
 
 <template>
@@ -27,6 +30,8 @@ if (props.images && props.images.length) {
         :taxon-latname="taxonLatname"
         :vernacular-name="vernacularName"
         :single-line="true"
+        :font-family="fontFamily"
+        :font-size="fontSize"
       >
       </TaxonName>
     </div>
@@ -42,7 +47,6 @@ if (props.images && props.images.length) {
       >
         <ImageWithLicence
           :image="image"
-          :rounded="`rounded-xs`"
           :show-caption="false"
           sizes="(max-width: 349px) 100vw, (max-width: 767px) 33vw, (max-width: 1023px) 17vw, 15vw"
         />
@@ -54,7 +58,7 @@ if (props.images && props.images.length) {
 <style>
 .tp-navigation-node {
   padding: var(--size-md);
-  border-radius: var(--border-radius-sm);
+  /*border-radius: var(--border-radius-sm);*/
   box-shadow: var(--box-shadow);
   height: 100%;
 }

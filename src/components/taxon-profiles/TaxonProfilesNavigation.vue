@@ -110,21 +110,21 @@ onMounted(async () => {
 
     node.taxonProfiles.forEach((taxonProfileReference) => {
 
-    let scientificName: string = `${taxonProfileReference.taxonLatname} ${taxonProfileReference.taxonAuthor}`;
-    let vernacularName: string|null = t(scientificName);
-    let primaryName: string = vernacularName; // for sorting
+      let scientificName: string = `${taxonProfileReference.taxonLatname} ${taxonProfileReference.taxonAuthor}`;
+      let vernacularName: string|null = t(scientificName);
+      let primaryName: string = vernacularName; // for sorting
 
-    if (vernacularName === scientificName) {
-      vernacularName = null;
-    }
+      if (vernacularName === scientificName) {
+        vernacularName = null;
+      }
 
-    const translatedTaxon:TranslatedTaxonWithSlugsAndImages = { ...taxonProfileReference, vernacularName, scientificName, primaryName };
-    if (taxonProfileReference.primaryImage) {
-      translatedTaxon.images = [taxonProfileReference.primaryImage];
-    } else if (taxonProfileReference.images.length) {
-      translatedTaxon.images = taxonProfileReference.images.slice(0,1);
-    }
-    attachedTaxonProfiles.push(translatedTaxon);
+      const translatedTaxon:TranslatedTaxonWithSlugsAndImages = { ...taxonProfileReference, vernacularName, scientificName, primaryName };
+      if (taxonProfileReference.primaryImage) {
+        translatedTaxon.images = [taxonProfileReference.primaryImage];
+      } else if (taxonProfileReference.images.length) {
+        translatedTaxon.images = taxonProfileReference.images.slice(0,1);
+      }
+      attachedTaxonProfiles.push(translatedTaxon);
 
     });
 

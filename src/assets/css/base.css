@@ -16,6 +16,8 @@
   --size-lg: 18px;
   --size-xl: 24px;
   --size-2xl: 32px;
+  --size-3xl: 48px;
+  --size-5xl: 108px;
   --gap-small: 4px;
   --gap-medium: 8px;
   --gap-large: 16px;
@@ -100,7 +102,7 @@ html, body {
 
 
 .font-narrow {
-  font-family: --var(font-family-tight);
+  font-family: var(--font-family-tight);
 }
 
 h1, h2, h3 {
@@ -109,19 +111,19 @@ h1, h2, h3 {
 }
 
 h1 {
-  font-family: --var(font-family-tight);
+  font-family: var(--font-family-tight);
   font-size: 28px;
   font-weight: 600;
 }
 
 h2 {
-  font-family: --var(font-family-tight);
+  font-family: var(--font-family-tight);
   font-size: 24px;
   font-weight: 500;
 }
 
 h3 {
-  font-family: --var(font-family-tight);
+  font-family: var(--font-family-tight);
   font-size: 20px;
   font-weight: 400;
 }
@@ -185,6 +187,10 @@ body.dark .bg-translucent {
   color: #FFF;
 }
 
+.bg-grey {
+  background: var(--sea-change-grey);
+}
+
 body.dark .bg-translucent-light {
   background: rgba(80,80,80, 0.5);
 }
@@ -235,6 +241,14 @@ body.dark .text-solid {
 
 .header-padding-top {
   padding-top: var(--header-bar-height);
+}
+
+.desktop-header-padding-top {
+  padding-top: 0;
+}
+
+p {
+  margin-bottom: var(--size-md);
 }
 
 
@@ -297,6 +311,15 @@ body.dark .text-solid {
 .mb-lg {
   margin-bottom: var(--size-lg);
 }
+
+.mt-md {
+  margin-top: var(--size-md);
+}
+
+.mt-lg {
+  margin-top: var(--size-lg);
+}
+
 .mt-xl {
   margin-top: var(--size-xl);
 }
@@ -313,9 +336,23 @@ body.dark .text-solid {
   margin-top: var(--size-2xl);
 }
 
+.mt-3xl {
+  margin-top: var(--size-3xl);
+}
+
 .my-xl {
   margin-top: var(--size-xl);
   margin-bottom: var(--size-xl);
+}
+
+.my-2xl {
+  margin-top: var(--size-2xl);
+  margin-bottom: var(--size-2xl);
+}
+
+.my-3xl {
+  margin-top: var(--size-3xl);
+  margin-bottom: var(--size-3xl);
 }
 
 .my-m {
@@ -328,6 +365,21 @@ body.dark .text-solid {
   padding-right: var(--size-md);
 }
 
+.px-lg {
+  padding-left: var(--size-lg);
+  padding-right: var(--size-lg);
+}
+
+.px-xl {
+  padding-left: var(--size-xl);
+  padding-right: var(--size-xl);
+}
+
+.px-2xl {
+  padding-left: var(--size-2xl);
+  padding-right: var(--size-2xl);
+}
+
 .py-xl {
   padding-top: var(--size-xl);
   padding-bottom: var(--size-xl);
@@ -336,6 +388,11 @@ body.dark .text-solid {
 .py-2xl {
   padding-top: var(--size-2xl);
   padding-bottom: var(--size-2xl);
+}
+
+.py-3xl {
+  padding-top: var(--size-3xl);
+  padding-bottom: var(--size-3xl);
 }
 
 .font-size-md {
@@ -450,6 +507,10 @@ body.dark a.nolinkstyle, body.dark .nolinkstyle a, body.dark a.nolinkstyle:visit
 
   .font-size-xl {
     font-size: var(--font-size-xl);
+  }
+
+  .desktop-header-padding-top {
+    padding-top: var(--desktop-header-bar-height);
   }
 }
 

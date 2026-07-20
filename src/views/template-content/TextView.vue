@@ -3,19 +3,22 @@ import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import type { Page } from 'localcosmos-client';
 
-import { fetchTemplateContent } from '@/composables/fetchTemplateContent';
-
+import { useTemplateContent } from '@/composables/useTemplateContent';
 import TemplateContentContainer from '@/components/container/TemplateContentContainer.vue';
 
 const loading = ref<boolean>(true);
 
 const route = useRoute();
+const { fetchTemplateContent } = useTemplateContent();
+
 const slug = route.params.slug as string; 
 
 const templateData = ref<Page| null>(null);
 
 onMounted(async() => {
-  templateData.value  = await fetchTemplateContent(slug);  
+  const result = await fetchTemplateContent(slug);
+  templateData.value = result.templateData;
+
   loading.value = false;
 });
 </script>

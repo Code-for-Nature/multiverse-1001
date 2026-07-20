@@ -300,7 +300,8 @@ onMounted(() => {
   border-radius: 0 25px 25px 0;
   backdrop-filter: none; /** make text below readable */
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
-  padding-left: 12px;
+  padding-left: 9px;
+  padding-top: 3px;
 }
 
 .burger-menu.open .burger-button {

@@ -9,9 +9,13 @@ const props = defineProps<{
   hideTaxonAuthor?: boolean,
   morphotype?: string,
   narrow?: boolean,
+  fontFamily?: string,
+  fontSize?: string,
 }>();
 
 let scientificName: string = props.taxonLatname;
+let fontFamily = props.fontFamily || 'var(--font-public-sans-1001)';
+let fontSize = props.fontSize || '16px';
 
 if (props.taxonAuthor) {
   scientificName = `${props.taxonLatname} ${props.taxonAuthor}`;
@@ -38,13 +42,14 @@ if (usedVernacularName && props.morphotype) {
       <span
         v-if="usedVernacularName"
         class="primary-name"
-        
+        :style="{ fontFamily: fontFamily, fontSize: fontSize }"
       >
         {{ usedVernacularName }}
       </span>
       <span
         v-else
         class="alternative-primary-name"
+        :style="{ fontFamily: fontFamily, fontSize: fontSize }"
       >
         <i>{{ taxonLatname }}</i> <br>
         <span v-if="taxonAuthor" class="scientific-name">{{ taxonAuthor }}</span>
@@ -64,7 +69,7 @@ if (usedVernacularName && props.morphotype) {
 
 <style scoped>
 .narrow {
-  font-family: --var(font-family-tight);
+  font-family: var(--font-family-tight);
 }
 
 .primary-name {

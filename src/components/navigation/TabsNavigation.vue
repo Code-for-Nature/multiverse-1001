@@ -107,6 +107,9 @@ const handleUnselectLetter = () => {
 }
 
 @media (min-width: 768px) {
+  .tabs-navigation {
+    padding-left: var(--size-md);
+  }
 }
 
 @media (min-width: 1024px) {
@@ -118,6 +121,7 @@ const handleUnselectLetter = () => {
   }
 
   .tabs-navigation {
+    padding-left: 0;
     background-color: var(--color-white-translucent);
   }
 }

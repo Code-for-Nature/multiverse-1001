@@ -15,7 +15,7 @@ const props = defineProps<{
       <slot name="title"></slot>
     </div>
     <div>
-      <ImageWithLicence :image="image" rounded="rounded" :show-caption="showCaption" />
+      <ImageWithLicence :image="image" rounded="sharp" :show-caption="showCaption" />
     </div>
     <div class="card-content">
       <slot></slot>
@@ -26,9 +26,13 @@ const props = defineProps<{
 
 <style scoped>
 .card {
-  border-radius: var(--border-radius-sm);
+  /*border-radius: var(--border-radius-sm);*/
   box-shadow: var(--box-shadow);
   width: 100%;
+}
+
+.card-title {
+  color: var(--sea-change-dark-turquoise);
 }
 
 .card-content {

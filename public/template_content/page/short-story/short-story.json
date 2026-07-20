@@ -1,0 +1,41 @@
+{
+  "templateName" : "short-story",
+  "type": "page",
+  "templatePath" : "/template_content/page/short-story/short-story.json",
+  "version" : 2,
+  "contents": {
+    "scientificName": {
+      "type": "text",
+      "helpText": "The scientific name of the species. This will be shown in the article header.",
+      "required": false,
+      "widget": "TextInput"
+    },
+    "number": {
+      "type": "text",
+      "helpText": "The number of the species of the story. This will be shown in the short stories overview.",
+      "required": false,
+      "widget": "TextInput"
+    },
+    "featuredImage": {
+      "type": "image",
+      "helpText": "Ideally 16:9. This image will be shown at the top of the article page.",
+      "required": false
+    },
+    "leadingSentence": {
+      "type": "text",
+      "helpText": "First sentence of the story, which ideally would be remarkably good. Stands out design-wise.",
+      "required": false
+    },
+    "text": {
+      "type": "text",
+      "format": "layoutable-full",
+      "required": true,
+      "allowMultiple": false
+    },
+    "imageGallery": {
+      "type": "image",
+      "required": false,
+      "allowMultiple": true
+    }
+  }
+}

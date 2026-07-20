@@ -115,7 +115,7 @@ onUnmounted(() => {
   <NavigationRail />
   <!-- Use modal store for burger menu state -->
   <BurgerMenu :is-open="modals.isOpen(MODAL_TYPES.BURGER)" @close-burger="modals.closeModal" />
-  <div class="backrop-filter bg-translucent">
+  <div class="bg-translucent">
     <RouterView />
   </div>
   <CTAObservationButton v-if="mainNavigation.observationCTA" :class="mainNavigation.observationCTAvisible ? '' : 'cta-hidden'" />

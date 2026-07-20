@@ -8,13 +8,34 @@ import { PhCaretLeft, PhCaretRight, PhX } from '@phosphor-icons/vue';
 
 import { useModalsStore, MODAL_TYPES } from '@/stores/modals';
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   images: ImageWithTextAndLicence[],
+  showCaptionInCarousel?: boolean,
+  equalImageHeights?: boolean,
+  equalImageHeight?: string,
+  equalImageAspectRatio?: string,
   smallImages?: boolean,
   safeCenter?: boolean,
   zoomable?: boolean,
   modalId?: string,
-}>();
+}>(), {
+  showCaptionInCarousel: true,
+  equalImageHeights: false,
+});
+
+const equalImageStyles = computed(() => {
+  const styles: Record<string, string> = {};
+
+  if (props.equalImageHeight) {
+    styles['--carousel-equal-image-height'] = props.equalImageHeight;
+  }
+
+  if (props.equalImageAspectRatio) {
+    styles['--carousel-equal-image-aspect-ratio'] = props.equalImageAspectRatio;
+  }
+
+  return styles;
+});
 
 const modals = useModalsStore();
 
@@ -227,7 +248,8 @@ onUnmounted(() => {
     <div
       ref="imagesContainer"
       class="carousel-images-container"
-      :class="{ 'safe-center': safeCenter }"
+      :class="{ 'safe-center': safeCenter, 'equal-image-heights': equalImageHeights }"
+      :style="equalImageStyles"
     >
       <!-- Images -->
       <div
@@ -237,8 +259,8 @@ onUnmounted(() => {
       >
         <ImageWithLicence
           :image="image"
-          rounded="rounded-xs"
-          :show-caption="true"
+          rounded="sharp"
+          :show-caption="showCaptionInCarousel"
           @click="() => openModal(counter)"
         />
       </div>
@@ -389,6 +411,29 @@ onUnmounted(() => {
   display: none; /* Chrome, Safari */
 }
 
+.carousel-images-container.equal-image-heights .carousel-image-container {
+  display: flex;
+  align-items: stretch;
+  height: var(--carousel-equal-image-height, auto);
+  aspect-ratio: var(--carousel-equal-image-aspect-ratio, 16 / 10);
+}
+
+.carousel-images-container.equal-image-heights .carousel-image-container :deep(.image-with-licence) {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel-images-container.equal-image-heights .carousel-image-container :deep(.image-container) {
+  flex: 1;
+}
+
+.carousel-images-container.equal-image-heights .carousel-image-container :deep(.image-container img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .carousel-image-container {
   flex-shrink: 0;
   scroll-snap-align: start; /* Snap each image to the start of the container */
@@ -403,7 +448,7 @@ onUnmounted(() => {
 }
 
 .carousel.small-images .carousel-image-container {
-  width: 120px;
+  width: 200px;
 }
 
 .carousel-image-container:first-child {

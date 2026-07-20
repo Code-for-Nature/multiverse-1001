@@ -1,0 +1,13 @@
+{
+  "templateName" : "video-collection",
+  "type": "page",
+  "templatePath" : "/template_content/page/video-collection/video-collection.json",
+  "version" : 1,
+  "contents": {
+    "videoPreview" : {
+      "type": "component",
+      "templateName": "VideoPreview",
+      "allowMultiple": true
+    }
+  }
+}
