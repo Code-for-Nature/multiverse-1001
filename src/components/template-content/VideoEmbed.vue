@@ -26,48 +26,9 @@ const handleLinkClick = (event: Event) => {
   }
 };
 
-// Function to extract video ID from different platforms
-const getEmbedUrl = (url: string, videoType: string) => {
-  if (videoType === 'Vimeo') {
-    // Extract Vimeo ID from URL like https://vimeo.com/123456789
-    const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
-    if (vimeoMatch) {
-      return `https://player.vimeo.com/video/${vimeoMatch[1]}?dnt=1`;
-    }
-    // If it's already just the ID
-    return `https://player.vimeo.com/video/${url}?dnt=1`;
-  }
-  
-  if (videoType === 'YouTube') {
-    // Extract YouTube ID from various URL formats
-    let videoId = '';
-    
-    // https://www.youtube.com/watch?v=VIDEO_ID
-    const youtubeMatch1 = url.match(/[?&]v=([^&#]*)/);
-    if (youtubeMatch1) videoId = youtubeMatch1[1];
-    
-    // https://youtu.be/VIDEO_ID
-    const youtubeMatch2 = url.match(/youtu\.be\/([^?&#]*)/);
-    if (youtubeMatch2) videoId = youtubeMatch2[1];
-    
-    // https://www.youtube.com/embed/VIDEO_ID
-    const youtubeMatch3 = url.match(/youtube\.com\/embed\/([^?&#]*)/);
-    if (youtubeMatch3) videoId = youtubeMatch3[1];
-    
-    if (videoId) {
-      return `https://www.youtube.com/embed/${videoId}`;
-    }
-    // If it's already just the ID
-    return `https://www.youtube.com/embed/${url}`;
-  }
-  
-  // For direct video URLs (mp4, webm, etc.)
-  if (videoType === 'Direct') {
-    return url;
-  }
-  
-  return url;
-};
+import { useVideoUrl } from '@/composables/useVideoUrl';
+
+const { getEmbedUrl } = useVideoUrl();
 
 </script>
 

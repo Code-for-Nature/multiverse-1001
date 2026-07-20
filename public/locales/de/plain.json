@@ -49,7 +49,8 @@
         "noDescription": "Keine Beschreibung vorhanden",
         "Profile": "Steckbrief",
         "RelatedSpecies": "Beziehungen",
-        "RelatedSpeciesTitle": "Beziehungen zu anderen Arten"
+        "RelatedSpeciesTitle": "Beziehungen zu anderen Arten",
+        "templateContents": "Storys"
     },
     "natureGuide": {
         "Evaluation": "Auswertung",

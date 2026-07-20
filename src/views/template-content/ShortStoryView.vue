@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import type { ImageWithTextAndLicence, Page } from 'localcosmos-client';
 
-type GalleryImage = ImageWithTextAndLicence & { aspectRatio: string };
+
 import { useTemplateContent } from '@/composables/useTemplateContent';
 import type { TemplateContentSource } from '@/composables/useTemplateContent';
 import TemplateContentContainer from '@/components/container/TemplateContentContainer.vue';
@@ -11,8 +11,7 @@ import TemplateContentContainer from '@/components/container/TemplateContentCont
 import { useRouter } from 'vue-router';
 import { useLanguageStore } from '@/stores/language';
 
-import { MasonryWall } from '@yeger/vue-masonry-wall'
-import ImagePreview from '@/components/images/ImagePreview.vue';
+import ImageMasonry from '@/components/images/ImageMasonry.vue';
 
 const router = useRouter();
 const languageStore = useLanguageStore();
@@ -25,15 +24,7 @@ const slug = route.params.slug as string;
 const templateData = ref<Page| null>(null);
 const templateSource = ref<TemplateContentSource | null>(null);
 
-const galleryImages = ref<GalleryImage[]>([]);
-
-const preloadImage = (url: string): Promise<{ width: number; height: number }> =>
-  new Promise((resolve) => {
-    const img = new window.Image();
-    img.onload = () => resolve({ width: img.naturalWidth, height: img.naturalHeight });
-    img.onerror = () => resolve({ width: 4, height: 3 });
-    img.src = url;
-  });
+const galleryImages = ref<ImageWithTextAndLicence[]>();
 
 let date: string | null = null;
 
@@ -47,21 +38,15 @@ onMounted(async() => {
     }
 
     if (templateData.value.contents.imageGallery && templateData.value.contents.imageGallery.length > 0) {
-      for (const image of templateData.value.contents.imageGallery) {
-        const url1x = templateContentImageUrl(image.imageUrl['1x'], templateSource.value);
-        const { width, height } = await preloadImage(url1x);
-        const galleryImage: GalleryImage = {
-          imageUrl: {
-            '1x': url1x,
-            '2x': templateContentImageUrl(image.imageUrl['2x'], templateSource.value),
-            '4x': templateContentImageUrl(image.imageUrl['4x'], templateSource.value),
-          },
-          text: image.text,
-          licence: image.licence,
-          aspectRatio: `${width} / ${height}`,
-        };
-        galleryImages.value.push(galleryImage);
-      }
+      galleryImages.value = templateData.value.contents.imageGallery.map((image) => ({
+        imageUrl: {
+          '1x': templateContentImageUrl(image.imageUrl['1x'], templateSource.value),
+          '2x': templateContentImageUrl(image.imageUrl['2x'], templateSource.value),
+          '4x': templateContentImageUrl(image.imageUrl['4x'], templateSource.value),
+        },
+        text: image.text,
+        licence: image.licence,
+      }));
     }
 
   }
@@ -105,13 +90,7 @@ onMounted(async() => {
         </div>
         <div class="story-gallery-container">
           <div class="article-container px-2xl mt-2xl">
-            <MasonryWall :items="galleryImages" :min-columns="2" :gap="16">
-              <template #default="{ item }">
-                <div :style="{ aspectRatio: item.aspectRatio }">
-                  <ImagePreview :image="item" :show-caption="false" />
-                </div>
-              </template>
-            </MasonryWall>
+            <ImageMasonry v-if="galleryImages" :images="galleryImages" :min-columns="2" :gap="16" />
           </div>
         </div>
       </div>

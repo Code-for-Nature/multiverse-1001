@@ -88,6 +88,18 @@ onUnmounted(() => {
   window.removeEventListener('open-login-modal', () => modals.openModal(MODAL_TYPES.LOGIN));
 });
 
+const templateContentViews = [
+  'ArticleView',
+  'CollectionView',
+  'GatewayView',
+  'ShortStoryView',
+  'StoryView',
+  'TaxonArticleCollectionView',
+  'TextView',
+  'VideoCollectionView',
+  'VideoStoryView',
+];
+
 let lastScrollX = window.scrollX;
 let lastScrollY = window.scrollY;
 
@@ -116,7 +128,11 @@ onUnmounted(() => {
   <!-- Use modal store for burger menu state -->
   <BurgerMenu :is-open="modals.isOpen(MODAL_TYPES.BURGER)" @close-burger="modals.closeModal" />
   <div class="bg-translucent">
-    <RouterView />
+    <RouterView v-slot="{ Component, route }">
+      <keep-alive :include="templateContentViews" :max="50">
+        <component :is="Component" :key="route.fullPath" />
+      </keep-alive>
+    </RouterView>
   </div>
   <CTAObservationButton v-if="mainNavigation.observationCTA" :class="mainNavigation.observationCTAvisible ? '' : 'cta-hidden'" />
   <LicenceBubble

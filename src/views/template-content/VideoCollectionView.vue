@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import type { Page, TemplateContentLink } from 'localcosmos-client';
 import { useTemplateContent } from '@/composables/useTemplateContent';
@@ -131,16 +131,7 @@ onMounted(() => {
   router.replace({ name: 'not-found' });
 });
 
-watch(() => route.params.slug, (slugParam) => {
-  const slug = getSlugFromRouteParam(slugParam);
 
-  if (slug) {
-    loadVideos(slug);
-    return;
-  }
-
-  router.replace({ name: 'not-found' });
-});
 </script>
 
 <template>

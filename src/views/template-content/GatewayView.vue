@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import type { ImageWithTextAndLicence, Page, TemplateContentLink } from 'localcosmos-client';
 import { useTemplateContent } from '@/composables/useTemplateContent';
@@ -117,8 +117,6 @@ const loadAll = async (slug: unknown) => {
 };
 
 onMounted(() => loadAll(route.params.slug));
-
-watch(() => route.params.slug, loadAll);
 </script>
 
 <template>

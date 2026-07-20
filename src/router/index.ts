@@ -459,7 +459,12 @@ const router = createRouter({
     }
   ],
   scrollBehavior(to, from, savedPosition) {
+    const keepAliveRouteNames = ['text', 'story', 'article', 'collection', 'taxon-article-collection', 'short-story', 'gateway', 'video-story', 'video-collection'];
+
     if (savedPosition) {
+      if (keepAliveRouteNames.includes(to.name as string)) {
+        return savedPosition;
+      }
       window.addEventListener('restore-scroll', () => {
         window.scrollTo(savedPosition.left, savedPosition.top);
       }, { once: true });
@@ -468,10 +473,7 @@ const router = createRouter({
     if (to.hash) {
       return { el: to.hash, behavior: 'smooth' };
     }
-    window.addEventListener('restore-scroll', () => {
-      window.scrollTo(0, 0);
-    }, { once: true });
-    return false;
+    return { top: 0, left: 0 };
   }
 });
 

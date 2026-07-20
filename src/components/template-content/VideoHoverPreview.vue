@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import type { ContentVideo } from '@/types/template-content';
 import { useCookieConsentStore } from '@/stores/cookie-consent';
 
@@ -11,42 +11,17 @@ const props = defineProps<{
 const consentStore = useCookieConsentStore();
 const isHovering = ref(false);
 
-const extractYoutubeId = (url: string): string | null => {
-  const fromQuery = url.match(/[?&]v=([^&#]*)/);
-  if (fromQuery?.[1]) {
-    return fromQuery[1];
+import { useVideoUrl } from '@/composables/useVideoUrl';
+
+const { extractYoutubeId, extractVimeoId, extractVimeoHash, fetchVimeoThumbnail } = useVideoUrl();
+
+const vimeoThumbnailSrc = ref<string | null>(null);
+
+onMounted(async () => {
+  if (props.video.videoType === 'Vimeo') {
+    vimeoThumbnailSrc.value = await fetchVimeoThumbnail(props.video.url);
   }
-
-  const fromShortUrl = url.match(/youtu\.be\/([^?&#]*)/);
-  if (fromShortUrl?.[1]) {
-    return fromShortUrl[1];
-  }
-
-  const fromEmbed = url.match(/youtube\.com\/embed\/([^?&#]*)/);
-  if (fromEmbed?.[1]) {
-    return fromEmbed[1];
-  }
-
-  // If an ID is passed directly.
-  if (/^[a-zA-Z0-9_-]{11}$/.test(url)) {
-    return url;
-  }
-
-  return null;
-};
-
-const extractVimeoId = (url: string): string | null => {
-  const fromUrl = url.match(/vimeo\.com\/(\d+)/);
-  if (fromUrl?.[1]) {
-    return fromUrl[1];
-  }
-
-  if (/^\d+$/.test(url)) {
-    return url;
-  }
-
-  return null;
-};
+});
 
 const hasConsent = computed(() => {
   if (props.video.videoType === 'YouTube') {
@@ -75,8 +50,9 @@ const previewSrc = computed(() => {
     if (!videoId) {
       return null;
     }
-
-    return `https://player.vimeo.com/video/${videoId}?autoplay=1&muted=1&background=1&dnt=1&title=0&byline=0&portrait=0&autopause=0`;
+    const hash = extractVimeoHash(props.video.url);
+    const hashParam = hash ? `&h=${hash}` : '';
+    return `https://player.vimeo.com/video/${videoId}?autoplay=1&muted=1&background=1&dnt=1&title=0&byline=0&portrait=0&autopause=0${hashParam}`;
   }
 
   return null;
@@ -89,6 +65,10 @@ const thumbnailSrc = computed(() => {
       return null;
     }
     return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  }
+
+  if (props.video.videoType === 'Vimeo') {
+    return vimeoThumbnailSrc.value;
   }
 
   return null;
