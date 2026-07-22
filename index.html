@@ -2,6 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy"
+      content="default-src 'self' app://localhost data: blob: gap: 'unsafe-eval' 'unsafe-inline';
+               frame-src https://player.vimeo.com https://*.vimeo.com https://www.youtube.com https://youtube.com;
+               connect-src 'self' app://localhost https://vimeo.com https://*.vimeo.com https://*.vimeocdn.com https://www.youtube.com;
+               img-src 'self' app://localhost data: blob: https://*.vimeocdn.com https://*.ytimg.com;
+               media-src 'self' blob: https://*.vimeocdn.com;">
 
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
