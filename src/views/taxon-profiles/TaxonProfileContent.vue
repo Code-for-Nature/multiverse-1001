@@ -19,10 +19,13 @@ import ReadOnlyFilter from '@/components/taxon-profiles/traits/ReadOnlyFilter.vu
 import TaxonRelationship from '@/components/taxon-profiles/TaxonRelationship.vue';
 import LargeCard from '@/components/container/LargeCard.vue';
 import TemplateContentPreview from '@/components/template-content/TemplateContentPreview.vue';
+import VideoHoverPreview from '@/components/template-content/VideoHoverPreview.vue';
+import ShortStoryPreview from '@/components/template-content/ShortStoryPreview.vue';
 import ImageCard from '@/components/ui/ImageCard.vue';
 import VideoEmbed from '@/components/template-content/VideoEmbed.vue';
 
 import { useTemplateContent } from '@/composables/useTemplateContent';
+import { backgroundImageStyle } from '@/utils/backgroundImageStyle';
 import TaxonProfileLink from '@/components/ui/TaxonProfileLink.vue';
 
 const props = defineProps<{
@@ -38,19 +41,83 @@ const templateContent = inject('templateContent') as TemplateContent;
 
 const languageStore = useLanguageStore();
 
-const { fetchTemplateContent } = useTemplateContent();
+const { fetchTemplateContent, getImagePath, templateContentImageUrl } = useTemplateContent();
 const mainNavigation = useMainNavigationStore();
 
 const VIDEO_TEMPLATE_NAME = 'video-story';
+const SHORT_STORY_TEMPLATE_NAME = 'short-story';
+const TEMPLATE_GROUP_TITLE_MAP: Record<string, string> = {
+  'video-story': 'Video Stories',
+  'short-story': 'Short Stories',
+};
+
+type TemplateContentPreviewItem = TemplateContentPreviewData & {
+  video?: ContentVideo | null;
+  shortStoryScientificName?: string | null;
+  shortStoryImageText?: string | null;
+  shortStoryImageStyle?: Record<string, string>;
+};
 
 const taxonProfile = ref<TaxonProfile | null>(null);
 const videos = ref<ContentVideo[]>([]);
 const hasTaxonRelationships = ref<boolean>(false);
-const templateContentLinks = ref<TemplateContentPreviewData[]>([]);
+const templateContentLinksByTemplateName = ref<Record<string, TemplateContentPreviewItem[]>>({});
 const taxon = ref<Taxon | null>(null);
 const vernacularName = ref<string|null>(null);
 const title = ref<string>('');
 const pending = ref<boolean>(true);
+
+const templateContentGroupNames = computed(() => Object.keys(templateContentLinksByTemplateName.value));
+
+const isVideoTemplate = (templateName: string) => {
+  return templateName.toLowerCase() === VIDEO_TEMPLATE_NAME;
+};
+
+const isShortStoryTemplate = (templateName: string) => {
+  return templateName.toLowerCase() === SHORT_STORY_TEMPLATE_NAME;
+};
+
+const getTemplateGroupTitle = (templateName: string) => {
+  const normalizedTemplateName = templateName.toLowerCase();
+  return TEMPLATE_GROUP_TITLE_MAP[normalizedTemplateName] || templateName;
+};
+
+const getPreviewComponent = (previewItem: TemplateContentPreviewItem) => {
+  if (isVideoTemplate(previewItem.templateName) && previewItem.video) {
+    return VideoHoverPreview;
+  }
+
+  if (isShortStoryTemplate(previewItem.templateName)) {
+    return ShortStoryPreview;
+  }
+
+  return TemplateContentPreview;
+};
+
+const getPreviewProps = (previewItem: TemplateContentPreviewItem) => {
+  if (isVideoTemplate(previewItem.templateName) && previewItem.video) {
+    return {
+      video: previewItem.video,
+      title: previewItem.title,
+    };
+  }
+
+  if (isShortStoryTemplate(previewItem.templateName)) {
+    return {
+      title: previewItem.title,
+      templateName: previewItem.templateName,
+      slug: previewItem.slug,
+      scientificName: previewItem.shortStoryScientificName,
+      imageText: previewItem.shortStoryImageText,
+      imageStyle: previewItem.shortStoryImageStyle,
+      ariaLabel: previewItem.title,
+    };
+  }
+
+  return {
+    previewData: previewItem,
+  };
+};
 
 const images: ComputedRef<ImageWithTextAndLicence[]> = computed(() => {
   
@@ -163,25 +230,55 @@ const loadTaxonProfile = async (nameUuid: string) => {
 
     if (data.templateContents && data.templateContents.length > 0) {
       tabButtons.push({ text: t('taxonProfiles.TemplateContents'), tabIndex: 5, type: TabButtonType.STANDARD });
-      // prepare template content links
-      data.templateContents.forEach( async (tc) => {
+      // prepare template content links grouped by templateName
+      const previewDataList = await Promise.all(data.templateContents.map(async (tc) => {
         const tcResult = await fetchTemplateContent(tc.slug);
         if (tcResult.templateData != null) {
           const tcData = tcResult.templateData;
         
           if (tcData) {
-            const previewData: TemplateContentPreviewData = {
+            const contentVideo = isVideoTemplate(tcData.templateName)
+              ? ((tcData.contents?.video || null) as ContentVideo | null)
+              : null;
+            const shortStoryImagePath =
+              tcData.previewImage
+              || tcData.featuredImage
+              || getImagePath((tcData.contents?.previewImage || tcData.contents?.featuredImage || null) as ImageWithTextAndLicence | null);
+            const shortStoryImageStyle = backgroundImageStyle(shortStoryImagePath, tcResult.source, templateContentImageUrl);
+            const shortStoryScientificName = tcData.contents?.scientificName || null;
+            const shortStoryNumber = tcData.contents?.number;
+            const shortStoryImageText = shortStoryNumber != null ? String(shortStoryNumber) : null;
+
+            return {
               title: tcData.title,
               templateName: tcData.templateName,
               slug: tc.slug,
               previewImage: tcData.previewImage ? tcData.previewImage : null,
               featuredImage: tcData.featuredImage ? tcData.featuredImage : null,
               abstract: tcData.abstract ? tcData.abstract : null,
-            };
-            templateContentLinks.value.push(previewData);
+              video: contentVideo,
+              shortStoryScientificName,
+              shortStoryImageText,
+              shortStoryImageStyle,
+            } as TemplateContentPreviewItem;
           }
         }
-      });
+
+        return null;
+      }));
+
+      const groupedLinks: Record<string, TemplateContentPreviewItem[]> = {};
+
+      previewDataList
+        .filter((previewData): previewData is TemplateContentPreviewItem => previewData !== null)
+        .forEach((previewData) => {
+          if (!groupedLinks[previewData.templateName]) {
+            groupedLinks[previewData.templateName] = [];
+          }
+          groupedLinks[previewData.templateName].push(previewData);
+        });
+
+      templateContentLinksByTemplateName.value = groupedLinks;
     }
 
     // Sort tabs by tabIndex to ensure correct order
@@ -259,7 +356,7 @@ watch(() => props.nameUuid, async (newNameUuid) => {
                 </div>
 
                 <div v-if="videos" class="container-md page-padding-x">
-                  <div class="video-list">
+                  <div class="video-list mt-2xl">
                     <div
                       v-for="video in videos"
                       :key="video.url"
@@ -399,12 +496,22 @@ watch(() => props.nameUuid, async (newNameUuid) => {
               >
                 <div class="pb-2xl">
                   <h1>{{ t('taxonProfiles.TemplateContents') }}</h1>
-                  <div class="mt-xl">
-                    <TemplateContentPreview
-                      v-for="(tcLink, index) in templateContentLinks"
-                      :key="index"
-                      :preview-data="tcLink"
-                    />
+                  <div class="template-content-groups mt-xl">
+                    <div
+                      v-for="templateName in templateContentGroupNames"
+                      :key="templateName"
+                      class="template-content-group"
+                    >
+                      <h2 class="template-content-group-title">{{ getTemplateGroupTitle(templateName) }}</h2>
+                      <div class="template-content-previews">
+                        <component
+                          v-for="tcLink in templateContentLinksByTemplateName[templateName]"
+                          :key="tcLink.slug"
+                          :is="getPreviewComponent(tcLink)"
+                          v-bind="getPreviewProps(tcLink)"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -461,6 +568,22 @@ watch(() => props.nameUuid, async (newNameUuid) => {
   gap: var(--size-md);
 }
 
+.template-content-previews {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: var(--size-md);
+}
+
+.template-content-groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-xl);
+}
+
+.template-content-group-title {
+  margin: 0 0 var(--size-md) 0;
+}
+
 @media (min-width: 640px) {
 }
 
@@ -471,6 +594,10 @@ watch(() => props.nameUuid, async (newNameUuid) => {
 
   .morphotypes-list {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .template-content-previews {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

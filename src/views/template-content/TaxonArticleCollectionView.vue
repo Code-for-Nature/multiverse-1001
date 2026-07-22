@@ -5,6 +5,8 @@ import type { ImageWithTextAndLicence, Page, TemplateContentLink } from 'localco
 import { useTemplateContent } from '@/composables/useTemplateContent';
 import type { TemplateContentSource } from '@/composables/useTemplateContent';
 import TemplateContentContainer from '@/components/container/TemplateContentContainer.vue';
+import { backgroundImageStyle } from '@/utils/backgroundImageStyle';
+import ShortStoryPreview from '@/components/template-content/ShortStoryPreview.vue';
 
 import { useRouter } from 'vue-router';
 
@@ -28,24 +30,13 @@ type TaxonArticleLink = {
 
 const articles = ref<TaxonArticleLink[]>([]);
 const articleImages = ref<Record<string, string | null>>({});
+const articleImageSource = ref<Record<string, TemplateContentSource | null>>({});
 const featuredImage = ref<string | null>(null);
 
 const isBlank = (value?: string): boolean => value == null || value.trim() === '';
 
-const createBackgroundImageStyle = (slug: string): Record<string, string> => {
-  const image = articleImages.value[slug];
-  if (!image) {
-    return {
-      '--article-image-fallback': 'none',
-      '--article-image-set': 'none'
-    };
-  }
-
-  return {
-    '--article-image-fallback': `url("${image}")`,
-    '--article-image-set': `url("${image}")`
-  };
-};
+const createBackgroundImageStyle = (slug: string): Record<string, string> =>
+  backgroundImageStyle(articleImages.value[slug] ?? null, articleImageSource.value[slug] ?? null, templateContentImageUrl);
 
 const loadCollection = async (slug: string) => {
   
@@ -68,6 +59,7 @@ const loadCollection = async (slug: string) => {
 
 const loadArticlePreviewData = async () => {
   articleImages.value = {};
+  articleImageSource.value = {};
 
   const articleResults = await Promise.all(
     articles.value.map(async (article) => {
@@ -86,21 +78,23 @@ const loadArticlePreviewData = async () => {
       const needsFetch = !directImagePath || needsFallbackImageText || needsFallbackScientificName;
 
       let articleData: Page | null = null;
+      let fetchedSource: TemplateContentSource | null = null;
       if (needsFetch) {
         const result = await fetchTemplateContent(articleSlug);
         articleData = result.templateData;
+        fetchedSource = result.source;
       }
 
-      let imageUrl: string | null = null;
+      let imagePath: string | null = null;
+      let imageSource: TemplateContentSource | null = null;
       if (directImagePath) {
-        imageUrl = templateContentImageUrl(directImagePath, templateSource.value);
+        imagePath = directImagePath;
+        imageSource = templateSource.value;
       }
       else {
         const image: ImageWithTextAndLicence | null = articleData?.contents?.previewImage || articleData?.contents?.featuredImage || null;
-        const imagePath = getImagePath(image);
-        if (imagePath) {
-          imageUrl = templateContentImageUrl(imagePath, templateSource.value);
-        }
+        imagePath = getImagePath(image);
+        imageSource = fetchedSource;
       }
 
       const articleWithFallbacks: TaxonArticleLink = { ...article };
@@ -121,7 +115,8 @@ const loadArticlePreviewData = async () => {
 
       return {
         slug: articleSlug,
-        imageUrl,
+        imagePath,
+        imageSource,
         article: articleWithFallbacks,
       };
     })
@@ -129,11 +124,12 @@ const loadArticlePreviewData = async () => {
 
   articles.value = articleResults.map((result) => result.article);
 
-  articleImages.value = Object.fromEntries(
-    articleResults
-      .filter((result): result is { slug: string; imageUrl: string | null; article: TaxonArticleLink } => result.slug !== null)
-      .map((result) => [result.slug, result.imageUrl] as const)
+  const validResults = articleResults.filter(
+    (result): result is { slug: string; imagePath: string | null; imageSource: TemplateContentSource | null; article: TaxonArticleLink } => result.slug !== null
   );
+
+  articleImages.value = Object.fromEntries(validResults.map((result) => [result.slug, result.imagePath]));
+  articleImageSource.value = Object.fromEntries(validResults.map((result) => [result.slug, result.imageSource]));
 };
 
 
@@ -156,7 +152,7 @@ onMounted(() => loadAll(route.params.slug));
 </script>
 
 <template>
-  <TemplateContentContainer :loading="loading">
+  <TemplateContentContainer :loading="loading" class="bg-translucent">
     <div v-if="templateData">
       <div class="rail-padding">
         <div
@@ -181,32 +177,14 @@ onMounted(() => loadAll(route.params.slug));
             v-for="(article, counter) in articles"
             :key="counter"
           >
-            <RouterLink
+            <ShortStoryPreview
               :to="article.pageLink.url"
-              class="nolinkstyle"
-            >
-              <div class="article-preview">
-                <div
-                  class="article-image"
-                  :style="createBackgroundImageStyle(article.pageLink.slug)"
-                  role="img"
-                  :aria-label="article.linkName"
-                >
-                  <div class="article-image-overlay"></div>
-                  <div v-if="article.imageText" class="article-image-text">
-                    {{ article.imageText }}
-                  </div>
-                </div>
-                <div class="article-content">
-                  <div class="article-title">
-                    {{ article.linkName }}
-                  </div>
-                  <div v-if="article.scientificName" class="article-scientific-name">
-                    <i>{{ article.scientificName }}</i>
-                  </div>
-                </div>
-              </div>
-            </RouterLink>
+              :title="article.linkName"
+              :scientific-name="article.scientificName"
+              :image-text="article.imageText"
+              :image-style="createBackgroundImageStyle(article.pageLink.slug)"
+              :aria-label="article.linkName"
+            />
           </div>
         </div>
       </div>
@@ -218,75 +196,7 @@ onMounted(() => loadAll(route.params.slug));
 .article-list {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--gap-medium);
-}
-
-.article-preview {
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition:var(--transition-cubic);
-  background: var(--sea-change-dark-green);
-}
-
-.article-title {
-  font-size: var(--font-size-2xl);
-  font-family: var(--font-lusitana-1001);
-  font-weight: 600;
-  color: var(--sea-change-dark-green);
-}
-
-.article-scientific-name {
-  color: var(--sea-change-dark-green);
-  font-size: var(--font-size-lg);
-  font-family: var(--font-public-sans-1001);
-}
-
-.article-image {
-  position: relative;
-  width: 100%;
-  margin: 0 auto;
-  aspect-ratio: 4 / 3;
-  min-height: 180px;
-  background-color: var(--sea-change-dark-green);
-  background-image: var(--article-image-fallback);
-  background-image: var(--article-image-set);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.article-content {
-  background: #FFFFFF;
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: var(--size-lg) var(--size-xl);
-  color: var(--sea-change-dark-turquoise);
-}
-
-.article-image-text {
-  position: absolute;
-  z-index: 1;
-  left: 0;
-  bottom: 0;
-  text-align: left;
-  color: #FFFFFF;
-  font-family: var(--font-lusitana-1001);
-  font-size: var(--font-size-2xl);
-  font-weight: 600;
-  padding: var(--size-lg);
-}
-
-.article-image-overlay {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.2) 20%, rgba(0, 0, 0, 0.68) 100%);
-  z-index: 0;
+  gap: var(--size-lg);
 }
 
 .featured-image {
@@ -337,10 +247,6 @@ onMounted(() => loadAll(route.params.slug));
 
   .article-list {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .article-content {
-    min-height: 7rem;
   }
 }
 

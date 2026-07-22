@@ -9,6 +9,7 @@ import TemplateContentContainer from '@/components/container/TemplateContentCont
 import { useRouter } from 'vue-router';
 
 import ColorButton from '@/components/ui/ColorButton.vue';
+import { backgroundImageStyle } from '@/utils/backgroundImageStyle';
 
 const router = useRouter();
 const { fetchTemplateContent, getImagePath, templateContentImageUrl } = useTemplateContent();
@@ -32,23 +33,8 @@ const articleImages = ref<Record<string, string | null>>({});
 const articleImageSource = ref<Record<string, TemplateContentSource | null>>({});
 const featuredImage = ref<string | null>(null);
 
-const createBackgroundImageStyle = (slug: string): Record<string, string> => {
-  const imagePath = articleImages.value[slug];
-  const source = articleImageSource.value[slug] ?? null;
-  const imageUrl = imagePath ? templateContentImageUrl(imagePath, source) : null;
-  
-  if (!imagePath) {
-    return {
-      '--article-image-fallback': 'none',
-      '--article-image-set': 'none'
-    };
-  }
-
-  return {
-    '--article-image-fallback': `url("${imageUrl}")`,
-    '--article-image-set': `url("${imageUrl}")`
-  };
-};
+const createBackgroundImageStyle = (slug: string): Record<string, string> =>
+  backgroundImageStyle(articleImages.value[slug] ?? null, articleImageSource.value[slug] ?? null, templateContentImageUrl);
 
 const loadCollection = async (slug: string) => {
   const result = await fetchTemplateContent(slug);
@@ -169,7 +155,7 @@ onMounted(() => loadAll(route.params.slug));
 </script>
 
 <template>
-  <TemplateContentContainer :loading="loading">
+  <TemplateContentContainer :loading="loading" class="bg-translucent">
     <div v-if="templateData">
       <div class="rail-padding">
         <div

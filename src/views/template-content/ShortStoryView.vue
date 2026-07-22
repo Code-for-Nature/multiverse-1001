@@ -28,6 +28,20 @@ const galleryImages = ref<ImageWithTextAndLicence[]>();
 
 let date: string | null = null;
 
+const resolveTemplateImageUrl = (
+  imageUrls: ImageWithTextAndLicence['imageUrl'] | undefined,
+  preferredSize: '1x' | '2x' | '4x' | '8x'
+): string | undefined => {
+  if (!imageUrls) {
+    return undefined;
+  }
+
+  const fallbackOrder: Array<'8x' | '4x' | '2x' | '1x'> = ['8x', '4x', '2x', '1x'];
+  const selectedPath = imageUrls[preferredSize] || fallbackOrder.map((size) => imageUrls[size]).find((path) => Boolean(path));
+
+  return selectedPath ? templateContentImageUrl(selectedPath, templateSource.value) : undefined;
+};
+
 onMounted(async() => {
   const result = await fetchTemplateContent(slug);
   templateData.value = result.templateData;
@@ -38,11 +52,12 @@ onMounted(async() => {
     }
 
     if (templateData.value.contents.imageGallery && templateData.value.contents.imageGallery.length > 0) {
-      galleryImages.value = templateData.value.contents.imageGallery.map((image) => ({
+      galleryImages.value = templateData.value.contents.imageGallery.map((image: ImageWithTextAndLicence) => ({
         imageUrl: {
-          '1x': templateContentImageUrl(image.imageUrl['1x'], templateSource.value),
-          '2x': templateContentImageUrl(image.imageUrl['2x'], templateSource.value),
-          '4x': templateContentImageUrl(image.imageUrl['4x'], templateSource.value),
+          '1x': resolveTemplateImageUrl(image.imageUrl, '1x'),
+          '2x': resolveTemplateImageUrl(image.imageUrl, '2x'),
+          '4x': resolveTemplateImageUrl(image.imageUrl, '4x'),
+          '8x': resolveTemplateImageUrl(image.imageUrl, '8x'),
         },
         text: image.text,
         licence: image.licence,
@@ -59,14 +74,14 @@ onMounted(async() => {
 </script>
 
 <template>
-  <TemplateContentContainer :loading="loading">
+  <TemplateContentContainer :loading="loading" class="bg-translucent">
     <div v-if="templateData">
       <div class="rail-padding">
         <div
           class="featured-image"
           :style="{
             backgroundImage: templateData.contents.featuredImage
-              ? `url(${templateContentImageUrl(templateData.contents.featuredImage.imageUrl['4x'], templateSource)})`
+              ? `url(${resolveTemplateImageUrl(templateData.contents.featuredImage.imageUrl, '4x') || ''})`
               : 'none'
           }"
         >

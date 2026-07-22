@@ -127,7 +127,7 @@ onUnmounted(() => {
   <NavigationRail />
   <!-- Use modal store for burger menu state -->
   <BurgerMenu :is-open="modals.isOpen(MODAL_TYPES.BURGER)" @close-burger="modals.closeModal" />
-  <div class="bg-translucent">
+  <div>
     <RouterView v-slot="{ Component, route }">
       <keep-alive :include="templateContentViews" :max="50">
         <component :is="Component" :key="route.fullPath" />

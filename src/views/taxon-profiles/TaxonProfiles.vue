@@ -38,6 +38,6 @@ watch(
     <template #fallback>
       <div>loading</div>
     </template>
-    <TaxonProfilesContent :key="componentKey" :slug="componentKey"/>
+    <TaxonProfilesContent :key="componentKey" :slug="componentKey" class="bg-translucent"/>
   </Suspense>
 </template>

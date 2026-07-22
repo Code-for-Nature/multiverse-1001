@@ -135,7 +135,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <TemplateContentContainer :loading="loading">
+  <TemplateContentContainer :loading="loading" class="bg-translucent">
     <div v-if="templateData" class="rail-padding">
       <div class="page-padding">
         <div class="mb-xl">

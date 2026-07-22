@@ -14,11 +14,13 @@ const props = withDefaults(defineProps<{
   title? : string,
   altText?: string,
   showCaption?: boolean,
+  singleLineCaption?: boolean,
   isTemplateContentImage?: boolean, // If true, use different styling for template content images
   templateContentSource?: TemplateContentSource | null, // Optional prop to pass the source for template content images
 }>(),(
   {
     showCaption: true,
+    singleLineCaption: false,
     isTemplateContentImage: false,
   }
 ));
@@ -71,7 +73,7 @@ const sharpLicenceCircle = !props.rounded || (hasCaption && (
         :sharp="sharpLicenceCircle"
       />
     </div>
-    <div class="caption" v-if="showCaption && image.text">
+    <div v-if="showCaption && image.text" class="caption" :class="{ 'single-line-caption': singleLineCaption }">
       <div class="caption-content" v-html="image.text"></div>
       <div class="caption-fade"></div>
     </div>
@@ -127,21 +129,29 @@ const sharpLicenceCircle = !props.rounded || (hasCaption && (
   padding: var(--size-xs) 0 var(--size-xs) var(--size-md);
   background: var(--sea-change-dark-green);
   color: var(--sea-change-light-blue);
-  overflow: hidden; /* Hide overflowed content */
   border-radius: 0; /* Match image rounding */
+}
+
+.caption.single-line-caption {
+  white-space: nowrap; /* Prevent text from wrapping */
+  text-overflow: ellipsis; /* Show ellipsis for overflowed text */
+  overflow: hidden; /* Hide overflowed content */
 }
 
 .caption-content {
   display: flex;
   align-items: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   flex: 1;
   min-width: 0;
   font-family: 'RobotoCondensed';
   font-weight: 400;
   font-size: var(--font-size-md);
+}
+
+.single-line-caption .caption-content {
+  white-space: nowrap; /* Prevent text from wrapping */
+  overflow: hidden; /* Hide overflowed content */
+  text-overflow: ellipsis; /* Show ellipsis for overflowed text */
 }
 
 .caption-content :deep(p) {

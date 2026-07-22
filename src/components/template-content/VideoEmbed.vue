@@ -1,17 +1,18 @@
 <script setup lang="ts">
+import { ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { t } from 'i18next';
 import type { ContentVideo } from '@/types/template-content';
-
 import { useCookieConsentStore } from '@/stores/cookie-consent';
 import OnOffButton from '../ui/OnOffButton.vue';
+import { useRouter } from 'vue-router';
+import Player from '@vimeo/player';
+import { useVideoUrl } from '@/composables/useVideoUrl';
 
 const consentStore = useCookieConsentStore();
 
 const props = defineProps<{
   video: ContentVideo
 }>();
-
-import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
@@ -26,26 +27,61 @@ const handleLinkClick = (event: Event) => {
   }
 };
 
-import { useVideoUrl } from '@/composables/useVideoUrl';
-
 const { getEmbedUrl } = useVideoUrl();
 
+// Vimeo Player SDK — data-vimeo-url with a player.vimeo.com URL bypasses the
+// oEmbed lookup, so unlisted/restricted videos work just like a plain iframe.
+const vimeoContainer = ref<HTMLDivElement | null>(null);
+let vimeoPlayer: Player | null = null;
+
+const initVimeoPlayer = () => {
+  if (!vimeoContainer.value || vimeoPlayer) return;
+  vimeoPlayer = new Player(vimeoContainer.value);
+  vimeoPlayer.on('ended', () => {
+    vimeoPlayer?.setCurrentTime(0);
+  });
+};
+
+const destroyVimeoPlayer = () => {
+  if (vimeoPlayer) {
+    vimeoPlayer.destroy();
+    vimeoPlayer = null;
+  }
+};
+
+onMounted(() => {
+  if (props.video.videoType === 'Vimeo' && consentStore.hasVimeoConsent) {
+    initVimeoPlayer();
+  }
+});
+
+onBeforeUnmount(() => {
+  destroyVimeoPlayer();
+});
+
+watch(
+  () => consentStore.hasVimeoConsent,
+  async (hasConsent) => {
+    if (props.video.videoType !== 'Vimeo') return;
+    if (!hasConsent) {
+      destroyVimeoPlayer();
+      return;
+    }
+    await nextTick();
+    initVimeoPlayer();
+  }
+);
 </script>
 
 <template>
   <div class="video-embed-container">
     <!-- Vimeo -->
     <div v-if="video.videoType === 'Vimeo'">
-      <iframe
+      <div
         v-if="consentStore.hasVimeoConsent"
-        :src="getEmbedUrl(video.url, 'Vimeo')"
-        width="100%"
-        height="360"
-        frameborder="0"
-        allow="autoplay; fullscreen; picture-in-picture"
-        allowfullscreen
-        title="Embedded Vimeo video"
-      ></iframe>
+        ref="vimeoContainer"
+        :data-vimeo-url="getEmbedUrl(video.url, 'Vimeo')"
+      ></div>
       <div v-else class="video-placeholder-container">
         <div class="video-provider-logo">
           <img src="/images/logos/Vimeo_Logo.svg" />
@@ -148,7 +184,7 @@ const { getEmbedUrl } = useVideoUrl();
   width: auto;
 }
 
-iframe, video {
+:deep(iframe), video {
   aspect-ratio: 16/9;
   width: 100%;
   height: auto;

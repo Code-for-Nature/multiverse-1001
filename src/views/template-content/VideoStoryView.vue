@@ -40,7 +40,7 @@ onMounted(async() => {
 </script>
 
 <template>
-  <TemplateContentContainer :loading="loading">
+  <TemplateContentContainer :loading="loading" class="bg-translucent">
     <div v-if="templateData" class="container">
       <LargeCard class="pb-2xl page-padding-y">
         <div class="container-md sm-page-padding-x">

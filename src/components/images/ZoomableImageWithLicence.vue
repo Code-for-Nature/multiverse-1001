@@ -331,7 +331,6 @@ const handleWheelZoom = (event: WheelEvent) => {
   
 };
 
-
 onMounted(() => {
   const options = {
     supportedGestures: [Pan, Pinch],

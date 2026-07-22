@@ -24,7 +24,7 @@ onMounted(async() => {
 </script>
 
 <template>
-  <TemplateContentContainer :loading="loading">
+  <TemplateContentContainer :loading="loading" class="bg-translucent">
     <div v-if="templateData">
       <div>
         <h1>{{ templateData.title }}</h1>

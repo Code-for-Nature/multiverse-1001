@@ -90,7 +90,18 @@ const dateString = today.toLocaleDateString(undefined, { month: 'long', day: 'nu
   height: 100%;
   position: relative;
   background-image:
-    radial-gradient(circle at center, rgba(0, 0, 0, 0.3) 32%, rgba(0, 0, 0, 0.70) 100%),
+    linear-gradient(to right,
+      rgba(0, 0, 0, 1.0) 0%,
+      rgba(0, 0, 0, 0.6) 5%,
+      rgba(0, 0, 0, 0) 50%,
+      rgba(0, 0, 0, 0.6) 95%,
+      rgba(0, 0, 0, 1.0) 100%),
+    radial-gradient(circle at center,
+      rgba(0, 0, 0, 0.3) 0%,
+      rgba(0, 0, 0, 0.3) 42%,
+      rgba(0, 0, 0, 0.45) 62%,
+      rgba(0, 0, 0, 1.0) 90%,
+      rgba(0, 0, 0, 1.0) 100%),
     var(--hero-bg-image);
   background-size: cover;
   background-position: center;

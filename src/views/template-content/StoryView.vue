@@ -4,9 +4,8 @@ import { useRoute } from 'vue-router';
 import type { Page } from 'localcosmos-client';
 import type { ContentParagraph, ContentVideo } from '@/types/template-content';
 import { useTemplateContent } from '@/composables/useTemplateContent';
-import type { TemplateContentSource } from '@/composables/useTemplateContent';
 import TemplateContentContainer from '@/components/container/TemplateContentContainer.vue';
-import ImageWithLicence from '@/components/images/ImageWithLicence.vue';
+import ImagePreview from '@/components/images/ImagePreview.vue';
 import VideoEmbed from '@/components/template-content/VideoEmbed.vue';
 import LargeCard from '@/components/container/LargeCard.vue';
 import { useRouter } from 'vue-router';
@@ -20,7 +19,6 @@ const loading = ref<boolean>(true);
 const route = useRoute();
 const slug = route.params.slug as string; 
 const templateData = ref<Page| null>(null);
-const templateSource = ref<TemplateContentSource | null>(null);
 
 
 const paragraphs = ref<ContentParagraph[]>([]);
@@ -29,7 +27,6 @@ const videos = ref<ContentVideo[]>([]);
 onMounted(async() => {
   const result = await fetchTemplateContent(slug);
   templateData.value = result.templateData;
-  templateSource.value = result.source;
   if (templateData.value) {
     paragraphs.value = templateData.value.contents.paragraph || [];
     videos.value = templateData.value.contents.videos || [];
@@ -43,7 +40,7 @@ onMounted(async() => {
 </script>
 
 <template>
-  <TemplateContentContainer :loading="loading">
+  <TemplateContentContainer :loading="loading" class="bg-translucent">
     <div v-if="templateData" class="container">
       <LargeCard class="pb-2xl page-padding-y">
         <div class="container-md sm-page-padding-x">
@@ -66,11 +63,9 @@ onMounted(async() => {
               <div class="paragraph">
                 <div v-html="paragraph.text" class="paragraph-text"></div>
                 <div v-if="paragraph.image" class="paragraph-image">
-                  <ImageWithLicence
+                  <ImagePreview
                     :image="paragraph.image"
                     :show-caption="true"
-                    :is-template-content-image="true"
-                    :template-content-source="templateSource"
                     rounded="sharp"
                   />
                 </div>

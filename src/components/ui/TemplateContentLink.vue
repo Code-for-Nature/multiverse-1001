@@ -23,7 +23,6 @@ const viewName = props.templateName.toLowerCase();
 
 <style scoped>
   .card {
-    border-radius: var(--border-radius-sm);
     box-shadow: var(--box-shadow);
     width: 100%;
   }

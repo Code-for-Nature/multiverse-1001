@@ -81,7 +81,7 @@ watch(
       <div>loading</div>
     </template>
     <ContentContainer>
-      <TaxonProfileContent :key="componentKey" :nameUuid="nameUuid" :morphotype="morphotype"/>
+      <TaxonProfileContent :key="componentKey" :nameUuid="nameUuid" :morphotype="morphotype" class="bg-translucent"/>
     </ContentContainer>
   </Suspense>
 </template>

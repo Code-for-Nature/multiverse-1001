@@ -10,6 +10,7 @@ const props = defineProps<{
 
 const consentStore = useCookieConsentStore();
 const isHovering = ref(false);
+const isIframeLoading = ref(false);
 
 import { useVideoUrl } from '@/composables/useVideoUrl';
 
@@ -84,10 +85,19 @@ const displayTitle = computed(() => {
 
 const handleMouseEnter = () => {
   isHovering.value = true;
+
+  if (props.video.videoType === 'Vimeo' && hasConsent.value && Boolean(previewSrc.value)) {
+    isIframeLoading.value = true;
+  }
 };
 
 const handleMouseLeave = () => {
   isHovering.value = false;
+  isIframeLoading.value = false;
+};
+
+const handleIframeLoad = () => {
+  isIframeLoading.value = false;
 };
 </script>
 
@@ -105,6 +115,7 @@ const handleMouseLeave = () => {
         allow="autoplay; encrypted-media; picture-in-picture"
         allowfullscreen
         :title="displayTitle"
+        @load="handleIframeLoad"
       ></iframe>
 
       <img
@@ -121,6 +132,15 @@ const handleMouseLeave = () => {
       <div v-if="!isHovering" class="play-overlay" aria-hidden="true">
         <span class="play-overlay-icon"></span>
       </div>
+
+      <div
+        v-if="isHovering && video.videoType === 'Vimeo' && isIframeLoading"
+        class="loading-overlay"
+        aria-hidden="true"
+      >
+        <span class="loading-spinner"></span>
+      </div>
+
       <div v-if="!hasConsent" class="consent-chip">
         Enable {{ video.videoType }} cookies to preview
       </div>
@@ -171,7 +191,8 @@ const handleMouseLeave = () => {
 }
 
 .play-overlay,
-.consent-chip {
+.consent-chip,
+.loading-overlay {
   position: absolute;
   z-index: 2;
 }
@@ -204,6 +225,29 @@ const handleMouseLeave = () => {
   border-top: 0.62rem solid transparent;
   border-bottom: 0.62rem solid transparent;
   border-left: 1rem solid rgba(255, 255, 255, 0.92);
+}
+
+.loading-overlay {
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(16, 42, 67, 0.36);
+}
+
+.loading-spinner {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 999px;
+  border: 3px solid rgba(255, 255, 255, 0.35);
+  border-top-color: rgba(255, 255, 255, 0.95);
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .consent-chip {

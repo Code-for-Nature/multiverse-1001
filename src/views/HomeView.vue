@@ -10,19 +10,19 @@ const isInPreviewMode = inject('isInPreviewMode') as boolean;
 <template>
   <ContentContainer>
     <div>
-        <div
-          v-if="isInPreviewMode"
-          class="page-full page-padding"
-        >
-          <div class="preview-indicator">
-            <div>
-              App in preview mode
-            </div>
+      <div
+        v-if="isInPreviewMode"
+        class="page-full page-padding"
+      >
+        <div class="preview-indicator">
+          <div>
+            App in preview mode
           </div>
-          
         </div>
-        <LandingPage v-else />
+        
       </div>
+      <LandingPage v-else />
+    </div>
   </ContentContainer>
 </template>
 

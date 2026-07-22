@@ -5,6 +5,7 @@ import type { ImageWithTextAndLicence, Page, TemplateContentLink } from 'localco
 import { useTemplateContent } from '@/composables/useTemplateContent';
 import type { TemplateContentSource } from '@/composables/useTemplateContent';
 import TemplateContentContainer from '@/components/container/TemplateContentContainer.vue';
+import { backgroundImageStyle } from '@/utils/backgroundImageStyle';
 
 import { useRouter } from 'vue-router';
 
@@ -27,23 +28,8 @@ const pageLinks = ref<GatewayLink[]>([]);
 const teaserImages = ref<Record<string, string | null>>({});
 const teaserImageSource = ref<Record<string, TemplateContentSource | null>>({});
 
-const createBackgroundImageStyle = (slug: string): Record<string, string> => {
-  const imagePath = teaserImages.value[slug];
-  const source = teaserImageSource.value[slug] ?? null;
-  const imageUrl = imagePath ? templateContentImageUrl(imagePath, source) : null;
-
-  if (!imagePath) {
-    return {
-      '--article-image-fallback': 'none',
-      '--article-image-set': 'none'
-    };
-  }
-
-  return {
-    '--article-image-fallback': `url("${imageUrl}")`,
-    '--article-image-set': `url("${imageUrl}")`
-  };
-};
+const createBackgroundImageStyle = (slug: string): Record<string, string> =>
+  backgroundImageStyle(teaserImages.value[slug] ?? null, teaserImageSource.value[slug] ?? null, templateContentImageUrl);
 
 const loadGatewayLinks = async (slug: string) => {
   const result = await fetchTemplateContent(slug);
@@ -120,7 +106,7 @@ onMounted(() => loadAll(route.params.slug));
 </script>
 
 <template>
-  <TemplateContentContainer :loading="loading">
+  <TemplateContentContainer :loading="loading" class="bg-translucent">
     <div v-if="templateData" class="desktop-header-padding-top">
       <div class="container bg-solid page-padding-y">
         <div class="gateway-links-container page-padding-x">
@@ -161,7 +147,6 @@ onMounted(() => loadAll(route.params.slug));
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--size-xl);
-  width: 80%;
   margin: 0 auto;
 }
 
@@ -220,6 +205,9 @@ onMounted(() => loadAll(route.params.slug));
 }
 
 @media (min-width: 640px) {
+  .gateway-links-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* Tablet and up: image left, text right */
@@ -236,12 +224,13 @@ onMounted(() => loadAll(route.params.slug));
 }
 
 @media (min-width: 1280px) {
+  .gateway-links-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
 
 }
 
 @media (min-width: 1536px) {
-  .gateway-links-container {
-    grid-template-columns: repeat(3, 1fr);
-  }
+
 }
 </style>
